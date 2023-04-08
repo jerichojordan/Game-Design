@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.18087587, g: 0.2264181, b: 0.30722177, a: 1}
+  m_IndirectSpecularColor: {r: 0.18087605, g: 0.22641839, b: 0.30722246, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -487,6 +487,38 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 273036691002190386, guid: f7bb9098352df7c4d9d5fe3bb080a57f, type: 3}
+      propertyPath: m_TagString
+      value: Spikes
+      objectReference: {fileID: 0}
+    - target: {fileID: 413851159054318098, guid: f7bb9098352df7c4d9d5fe3bb080a57f, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 413851159054318098, guid: f7bb9098352df7c4d9d5fe3bb080a57f, type: 3}
+      propertyPath: m_IsTrigger
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 594631151585205161, guid: f7bb9098352df7c4d9d5fe3bb080a57f, type: 3}
+      propertyPath: m_TagString
+      value: Spikes
+      objectReference: {fileID: 0}
+    - target: {fileID: 863842849645241460, guid: f7bb9098352df7c4d9d5fe3bb080a57f, type: 3}
+      propertyPath: m_TagString
+      value: Spikes
+      objectReference: {fileID: 0}
+    - target: {fileID: 2186381673733250563, guid: f7bb9098352df7c4d9d5fe3bb080a57f, type: 3}
+      propertyPath: m_TagString
+      value: Spikes
+      objectReference: {fileID: 0}
+    - target: {fileID: 3137233505277664132, guid: f7bb9098352df7c4d9d5fe3bb080a57f, type: 3}
+      propertyPath: m_TagString
+      value: Spikes
+      objectReference: {fileID: 0}
+    - target: {fileID: 3495184216049113433, guid: f7bb9098352df7c4d9d5fe3bb080a57f, type: 3}
+      propertyPath: m_TagString
+      value: Spikes
+      objectReference: {fileID: 0}
     - target: {fileID: 3495184216062830744, guid: f7bb9098352df7c4d9d5fe3bb080a57f, type: 3}
       propertyPath: m_Name
       value: Spikes
@@ -538,6 +570,74 @@ PrefabInstance:
     - target: {fileID: 3495184216062830751, guid: f7bb9098352df7c4d9d5fe3bb080a57f, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3813358401292937638, guid: f7bb9098352df7c4d9d5fe3bb080a57f, type: 3}
+      propertyPath: m_TagString
+      value: Spikes
+      objectReference: {fileID: 0}
+    - target: {fileID: 4072539993346774919, guid: f7bb9098352df7c4d9d5fe3bb080a57f, type: 3}
+      propertyPath: m_Size.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4174142944002637729, guid: f7bb9098352df7c4d9d5fe3bb080a57f, type: 3}
+      propertyPath: m_TagString
+      value: Spikes
+      objectReference: {fileID: 0}
+    - target: {fileID: 4580465074287844601, guid: f7bb9098352df7c4d9d5fe3bb080a57f, type: 3}
+      propertyPath: m_TagString
+      value: Spikes
+      objectReference: {fileID: 0}
+    - target: {fileID: 4777484637845032148, guid: f7bb9098352df7c4d9d5fe3bb080a57f, type: 3}
+      propertyPath: m_TagString
+      value: Spikes
+      objectReference: {fileID: 0}
+    - target: {fileID: 4989917675230682274, guid: f7bb9098352df7c4d9d5fe3bb080a57f, type: 3}
+      propertyPath: m_TagString
+      value: Spikes
+      objectReference: {fileID: 0}
+    - target: {fileID: 5008587289560118765, guid: f7bb9098352df7c4d9d5fe3bb080a57f, type: 3}
+      propertyPath: m_TagString
+      value: Spikes
+      objectReference: {fileID: 0}
+    - target: {fileID: 5342093529633075660, guid: f7bb9098352df7c4d9d5fe3bb080a57f, type: 3}
+      propertyPath: m_TagString
+      value: Spikes
+      objectReference: {fileID: 0}
+    - target: {fileID: 6186037029324836384, guid: f7bb9098352df7c4d9d5fe3bb080a57f, type: 3}
+      propertyPath: m_TagString
+      value: Spikes
+      objectReference: {fileID: 0}
+    - target: {fileID: 6350171300579103852, guid: f7bb9098352df7c4d9d5fe3bb080a57f, type: 3}
+      propertyPath: m_TagString
+      value: Spikes
+      objectReference: {fileID: 0}
+    - target: {fileID: 6606792175838985317, guid: f7bb9098352df7c4d9d5fe3bb080a57f, type: 3}
+      propertyPath: m_TagString
+      value: Spikes
+      objectReference: {fileID: 0}
+    - target: {fileID: 7262224386482576240, guid: f7bb9098352df7c4d9d5fe3bb080a57f, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7335019005607789907, guid: f7bb9098352df7c4d9d5fe3bb080a57f, type: 3}
+      propertyPath: m_TagString
+      value: Spikes
+      objectReference: {fileID: 0}
+    - target: {fileID: 7428325655597150294, guid: f7bb9098352df7c4d9d5fe3bb080a57f, type: 3}
+      propertyPath: m_TagString
+      value: Spikes
+      objectReference: {fileID: 0}
+    - target: {fileID: 7528920821423685638, guid: f7bb9098352df7c4d9d5fe3bb080a57f, type: 3}
+      propertyPath: m_TagString
+      value: Spikes
+      objectReference: {fileID: 0}
+    - target: {fileID: 8178457574653109924, guid: f7bb9098352df7c4d9d5fe3bb080a57f, type: 3}
+      propertyPath: m_TagString
+      value: Spikes
+      objectReference: {fileID: 0}
+    - target: {fileID: 8666342957413144259, guid: f7bb9098352df7c4d9d5fe3bb080a57f, type: 3}
+      propertyPath: m_TagString
+      value: Spikes
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f7bb9098352df7c4d9d5fe3bb080a57f, type: 3}
@@ -2153,6 +2253,24 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1350241472}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &1471525228 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7780786233027821258, guid: e5048fd8859649948a361ad8a81a7aa4, type: 3}
+  m_PrefabInstance: {fileID: 7781625801773060077}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1471525236
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1471525228}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e36c3fb4856935c479a10281b14f4fbd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  resetSound: {fileID: 8300000, guid: b9eff218e132a4e76be78840eca96fb2, type: 3}
 --- !u!1001 &1552734015
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3004,6 +3122,14 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 7646536766007730892, guid: e5048fd8859649948a361ad8a81a7aa4, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7646536766007730892, guid: e5048fd8859649948a361ad8a81a7aa4, type: 3}
+      propertyPath: m_IsTrigger
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7776709279487862944, guid: e5048fd8859649948a361ad8a81a7aa4, type: 3}
       propertyPath: m_LocalPosition.x
       value: 1.0966268
@@ -3050,7 +3176,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7781625801777146675, guid: e5048fd8859649948a361ad8a81a7aa4, type: 3}
       propertyPath: speed
-      value: 1234
+      value: 1500
+      objectReference: {fileID: 0}
+    - target: {fileID: 7781625801777146675, guid: e5048fd8859649948a361ad8a81a7aa4, type: 3}
+      propertyPath: m_Enabled
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7781625802687989353, guid: e5048fd8859649948a361ad8a81a7aa4, type: 3}
       propertyPath: m_RootOrder
