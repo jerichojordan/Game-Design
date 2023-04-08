@@ -13,7 +13,7 @@ public class GameManager : MonoBehaviour
     public void PointsCollected(int value)
     {
         playerScore += value;
-        scoreText.text = "Score: " + playerScore.ToString();
+        scoreText.text = "Points: " + playerScore.ToString();
     }
 
     public void StartGame()
