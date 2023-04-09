@@ -7,7 +7,7 @@ using UnityEngine.SceneManagement;
 public class GameManager : MonoBehaviour
 {
     private int playerScore;
-
+    
     [SerializeField] private TMP_Text scoreText;
 
     public void PointsCollected(int value)
@@ -30,5 +30,10 @@ public class GameManager : MonoBehaviour
     {
         yield return new WaitForSeconds(2f);
         SceneManager.LoadScene(id);
+    }
+
+    public void MainMenu()
+    {
+        SceneManager.LoadScene(0);
     }
 }
