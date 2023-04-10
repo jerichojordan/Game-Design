@@ -26,7 +26,7 @@ public class DoorOpener : MonoBehaviour
     {
         center.position = startPosition + new Vector3(0, 1.8f, 0);
         isOpen = true;
-        Invoke(nameof(CloseDoor), 3);
+        Invoke(nameof(CloseDoor), 5);
     }
 
     public void CloseDoor()
