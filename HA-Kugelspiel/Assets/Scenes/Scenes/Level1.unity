@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.17558254, g: 0.2197024, b: 0.30202642, a: 1}
+  m_IndirectSpecularColor: {r: 0.1755829, g: 0.21970281, b: 0.30202737, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -3416,9 +3416,17 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1257667892}
     - target: {fileID: 8079823051817162782, guid: 1db12decec0b67a4abf819df680c8877, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8079823051817162782, guid: 1db12decec0b67a4abf819df680c8877, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 1886043500}
+    - target: {fileID: 8079823051817162782, guid: 1db12decec0b67a4abf819df680c8877, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: Restart
+      objectReference: {fileID: 0}
     - target: {fileID: 8079823052045354779, guid: 1db12decec0b67a4abf819df680c8877, type: 3}
       propertyPath: m_Name
       value: PauseMenu
