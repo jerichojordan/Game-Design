@@ -11,4 +11,9 @@ public class Rotator : MonoBehaviour
     {
         transform.Rotate(Vector3.up, anglesPerSecond * Time.deltaTime, Space.World);
     }
+
+    public void changeRotatorSpeed(float speed)
+    {
+        anglesPerSecond = speed;
+    }
 }
