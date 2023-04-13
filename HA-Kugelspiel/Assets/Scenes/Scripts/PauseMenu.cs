@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using UnityEngine.SceneManagement;
 public class PauseMenu : MonoBehaviour
 {
     [SerializeField] private GameObject PauseMenuUI;
@@ -30,5 +30,11 @@ public class PauseMenu : MonoBehaviour
         AudioListener.pause = false;
         PauseMenuUI.SetActive(false);
         isPaused = false;
+    }
+
+    public void MainMenu()
+    {
+        DeactivateMenu();
+        SceneManager.LoadScene(0);
     }
 }

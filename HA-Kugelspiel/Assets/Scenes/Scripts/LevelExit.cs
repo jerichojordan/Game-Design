@@ -12,6 +12,7 @@ public class LevelExit : MonoBehaviour
     private void Start()
     {
         ps_ = GetComponentInChildren<ParticleSystem>();
+        ps_.Stop();
     }
 
     private void OnTriggerEnter(Collider other)
