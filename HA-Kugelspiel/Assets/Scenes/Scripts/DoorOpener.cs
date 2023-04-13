@@ -5,7 +5,7 @@ using UnityEngine;
 public class DoorOpener : MonoBehaviour
 {
     [SerializeField] Transform center;
-
+    [SerializeField] int OpenTime=5;
     private Vector3 startPosition;
     private bool isOpen = false;
 
@@ -26,7 +26,7 @@ public class DoorOpener : MonoBehaviour
     {
         center.position = startPosition + new Vector3(0, 1.8f, 0);
         isOpen = true;
-        Invoke(nameof(CloseDoor), 5);
+        Invoke(nameof(CloseDoor), OpenTime);
     }
 
     public void CloseDoor()

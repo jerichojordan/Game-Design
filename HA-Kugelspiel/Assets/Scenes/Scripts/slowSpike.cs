@@ -7,11 +7,8 @@ using UnityEngine.Events;
 
 public class slowSpike : MonoBehaviour
 {
-    [SerializeField] private float Speed;
-    [SerializeField] private UnityEvent<float> slowAngleSpeed;
-  
-
-
+    //[SerializeField] private float Speed;
+    [SerializeField] private UnityEvent slowAngleSpeed;
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Player"))
@@ -22,7 +19,7 @@ public class slowSpike : MonoBehaviour
     }
     private void slowSpeed()
     {
-        slowAngleSpeed.Invoke(Speed);
+        slowAngleSpeed.Invoke();
     }
 
     
