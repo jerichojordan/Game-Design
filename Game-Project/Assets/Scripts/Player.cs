@@ -5,10 +5,15 @@ using UnityEngine;
 public class Player : MonoBehaviour
 {
     private Rigidbody2D _rigidbody;
-    [SerializeField] private float _speed;
     public Animator animator;
-    
-    
+
+    [SerializeField] private float _speed = 2f;
+    [SerializeField] private Transform _gunPoint;
+    [SerializeField] private GameObject _bulletTrail;
+    [SerializeField] private float _weaponRange = 10f;
+    [SerializeField] private Animator _muzzleFlashAnimation;
+
+
     void Start()
     {
         _rigidbody = GetComponent<Rigidbody2D>();
@@ -19,6 +24,7 @@ public class Player : MonoBehaviour
     {
         LookAtMouse();
         Move();
+        Shoot();
     }
 
     //Function too make the player looking at the mouse cursor
@@ -33,5 +39,37 @@ public class Player : MonoBehaviour
         var input = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
         _rigidbody.velocity = input.normalized * _speed;
         animator.SetFloat("speed", Mathf.Abs(_rigidbody.velocity[0]) + Mathf.Abs(_rigidbody.velocity[1]));
+    }
+
+    private void Shoot()
+    {
+        if(Input.GetMouseButtonDown(0))
+        {
+            //_muzzleFlashAnimation.SetTrigger("Shoot");
+            var hit = Physics2D.Raycast(
+                _gunPoint.position,
+                transform.right,
+                _weaponRange
+                );
+
+            var trail = Instantiate(
+                _bulletTrail,
+                _gunPoint.position,
+                transform.rotation
+                );
+
+            var trailScript = trail.GetComponent<BulletTrail>();
+            if(hit.collider != null)
+            {
+                trailScript.setTargetPosition(hit.point);
+                //var hittable = hit.collider.GetComponent<IHittable>;
+                //hittable?.Hit()
+            }
+            else
+            {
+                var endPosition = _gunPoint.position + transform.right * _weaponRange;
+                trailScript.setTargetPosition(endPosition);
+            }
+        }
     }
 }
