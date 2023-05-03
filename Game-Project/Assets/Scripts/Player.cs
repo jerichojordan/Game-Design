@@ -12,6 +12,7 @@ public class Player : MonoBehaviour
     [SerializeField] private GameObject _bulletTrail;
     [SerializeField] private float _weaponRange = 10f;
     [SerializeField] private AudioClip _gunShot;
+    public float Damage = 35f;
 
 
     void Start()
@@ -63,8 +64,11 @@ public class Player : MonoBehaviour
             if(hit.collider != null)
             {
                 trailScript.setTargetPosition(hit.point);
-                //var hittable = hit.collider.GetComponent<IHittable>;
-                //hittable?.Hit();
+                var hittable = hit.collider.GetComponent<IHittable>();
+                if( hittable != null )
+                {
+                    hittable.RecieveHit(hit);
+                }
             }
             else
             {
