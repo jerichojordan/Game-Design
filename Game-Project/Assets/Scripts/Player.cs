@@ -11,6 +11,7 @@ public class Player : MonoBehaviour
     [SerializeField] private Transform _gunPoint;
     [SerializeField] private GameObject _bulletTrail;
     [SerializeField] private float _weaponRange = 10f;
+    [SerializeField] private AudioClip _gunShot;
 
 
     void Start()
@@ -44,6 +45,7 @@ public class Player : MonoBehaviour
     {
         if(Input.GetMouseButtonDown(0))
         {
+            AudioSource.PlayClipAtPoint(_gunShot, Camera.main.transform.position);
             animator.SetTrigger("Shoot");
             var hit = Physics2D.Raycast(
                 _gunPoint.position,
@@ -62,7 +64,7 @@ public class Player : MonoBehaviour
             {
                 trailScript.setTargetPosition(hit.point);
                 //var hittable = hit.collider.GetComponent<IHittable>;
-                //hittable?.Hit()
+                //hittable?.Hit();
             }
             else
             {
