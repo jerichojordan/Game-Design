@@ -2,14 +2,15 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnemyAI : MonoBehaviour
+public class EnemyAI : MonoBehaviour,IHittable
 {
-    public float speed;
-    public float stopDistance;
-    public float backoffDistance;
-    public Transform player;
-    public Rigidbody2D rb;
-    public float bulletForce = 100f;
+    [SerializeField] private float speed = 4f;
+    [SerializeField] private float stopDistance = 12f;
+    [SerializeField] private float backoffDistance = 7f;
+    [SerializeField] private float HitPoint = 100f;
+    private Transform player;
+    private Rigidbody2D rb;
+    public float bulletForce = 40f;
 
     void Start()
     {
@@ -18,6 +19,13 @@ public class EnemyAI : MonoBehaviour
     }
 
     void Update()
+    {
+        if (Vector2.Distance(transform.position, player.position)<15f) {
+            moveTowardPlayer();
+        }
+    }
+
+    private void moveTowardPlayer()
     {
         if (Vector2.Distance(transform.position, player.position) > stopDistance)
         {
@@ -33,8 +41,19 @@ public class EnemyAI : MonoBehaviour
         }
 
         //Facing Sledge
-        Vector3 richtung = player.position - transform.position;
-        float angle = Mathf.Atan2(richtung.y, richtung.x) * Mathf.Rad2Deg;
-        rb.rotation = angle;
+        transform.right = new Vector2(player.position.x, player.position.y) - new Vector2(transform.position.x, transform.position.y);
+    }
+
+    private void GetHit(RaycastHit2D hit)
+    {
+        HitPoint -= GameObject.FindGameObjectWithTag("Player").GetComponent<Player>().Damage;
+        if(HitPoint <= 0)
+        {
+            gameObject.SetActive(false);
+        }
+    }
+    public void RecieveHit(RaycastHit2D hit)
+    {
+        GetHit(hit);
     }
 }
