@@ -6,6 +6,7 @@ public class Player : MonoBehaviour
 {
     private Rigidbody2D _rigidbody;
     public Animator animator;
+    public float location;
 
     [SerializeField] private float _speed = 2f;
     [SerializeField] private Transform _gunPoint;
@@ -76,5 +77,9 @@ public class Player : MonoBehaviour
                 trailScript.setTargetPosition(endPosition);
             }
         }
+    }
+    public void setLocation(float room)
+    {
+        location = room;
     }
 }

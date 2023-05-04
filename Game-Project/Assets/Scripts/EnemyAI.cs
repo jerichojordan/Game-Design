@@ -10,6 +10,7 @@ public class EnemyAI : MonoBehaviour,IHittable
     [SerializeField] private float HitPoint = 100f;
     private Transform player;
     private Rigidbody2D rb;
+    public float location;
     public float bulletForce = 40f;
 
     void Start()
@@ -20,7 +21,8 @@ public class EnemyAI : MonoBehaviour,IHittable
 
     void Update()
     {
-        if (Vector2.Distance(transform.position, player.position)<15f) {
+        var Char = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();
+        if (Char.location == location) {
             moveTowardPlayer();
         }
     }
@@ -55,5 +57,9 @@ public class EnemyAI : MonoBehaviour,IHittable
     public void RecieveHit(RaycastHit2D hit)
     {
         GetHit(hit);
+    }
+    public void setLocation(float room)
+    {
+        location= room;
     }
 }
