@@ -1,28 +1,41 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Burst.CompilerServices;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class Player : MonoBehaviour
 {
-    private Rigidbody2D _rigidbody;
-    public Animator animator;
-
     [SerializeField] private float _speed = 2f;
     [SerializeField] private Transform _gunPoint;
     [SerializeField] private GameObject _bulletTrail;
     [SerializeField] private float _weaponRange = 10f;
     [SerializeField] private AudioClip _gunShot;
+    [SerializeField] private GameObject _CrosshairSprite;
+
+    public Animator animator;
     public float Damage = 35f;
+    public float location;
+
+    private Rigidbody2D _rigidbody;
+    GameObject _Crosshair;
 
 
     void Start()
     {
         _rigidbody = GetComponent<Rigidbody2D>();
+        var crossPos = _gunPoint.position;
+        _Crosshair = Instantiate(
+               _CrosshairSprite,
+               crossPos,
+               transform.rotation
+               );
     }
 
     
     void Update()
     {
+        CrosshairPositioning(_Crosshair);
         LookAtMouse();
         Move();
         Shoot();
@@ -77,4 +90,22 @@ public class Player : MonoBehaviour
             }
         }
     }
+    private void CrosshairPositioning(GameObject Crosshair)
+    {
+        var hit = Physics2D.Raycast(
+               _gunPoint.position,
+               transform.right,
+               10f
+               );
+        if (hit.collider != null)
+        {
+            Crosshair.transform.position = hit.point;
+        }
+        else
+        {
+            var pos = _gunPoint.position + transform.right*15f;
+            Crosshair.transform.position = pos;
+        }
+    }
 }
+

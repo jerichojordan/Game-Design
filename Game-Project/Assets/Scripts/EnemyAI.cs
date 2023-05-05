@@ -8,19 +8,26 @@ public class EnemyAI : MonoBehaviour,IHittable
     [SerializeField] private float stopDistance = 12f;
     [SerializeField] private float backoffDistance = 7f;
     [SerializeField] private float HitPoint = 100f;
+    [SerializeField] private float bulletForce = 40f;
+
     private Transform player;
+    private GameObject player_rb;
     private Rigidbody2D rb;
-    public float bulletForce = 40f;
+
+    public float location;
+    
 
     void Start()
     {
-        player = GameObject.FindGameObjectWithTag("Player").transform;
+        player_rb = GameObject.FindGameObjectWithTag("Player");
+        player = player_rb.transform;
         rb = this.GetComponent<Rigidbody2D>();
+        
     }
 
     void Update()
     {
-        if (Vector2.Distance(transform.position, player.position)<15f) {
+        if (player_rb.GetComponent<Player>().location==location) {
             moveTowardPlayer();
         }
     }
