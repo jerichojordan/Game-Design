@@ -28,7 +28,7 @@ public class RoomScript : MonoBehaviour
             {
                 if (enemy.transform.position.y >= y_range[0] && enemy.transform.position.y <= y_range[1])
                 {
-                    enemy.GetComponent<EnemyAI>().location=RoomNumber;
+                    enemy.GetComponent<EnemyAI>().setLocation(RoomNumber);
                 }
             }
         }
