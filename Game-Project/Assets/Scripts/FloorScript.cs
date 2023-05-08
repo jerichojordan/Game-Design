@@ -7,16 +7,29 @@ public class FloorScript : MonoBehaviour
     private Vector2 x_range;
     private Vector2 y_range;
     [SerializeField] private float RoomNumber;
+    [SerializeField] public GameObject shadow;
+    GameObject Player;
+    bool visited = false;
     void Start()
     {
         x_range = new Vector2(transform.position.x - (0.5f * transform.localScale.x), transform.position.x + (0.5f * transform.localScale.x));
         y_range = new Vector2(transform.position.y - (0.5f * transform.localScale.y), transform.position.y + (0.5f * transform.localScale.y));
+        Player = GameObject.FindGameObjectWithTag("Player");
     }
 
     // Update is called once per frame
     void Update()
     {
+        if (Player.transform.position.x >= x_range[0] && Player.transform.position.x <= x_range[1] && !visited)
+        {
+            if (Player.transform.position.y >= y_range[0] && Player.transform.position.y <= y_range[1])
+            {
+                shadow.GetComponent<Animator>().SetTrigger("Visited");
+                visited = true;
+            }
+        }
         detectEnemies();
+        
     }
 
     public void detectEnemies()
@@ -32,7 +45,6 @@ public class FloorScript : MonoBehaviour
                 }
             }
         }
-        var Player = GameObject.FindGameObjectWithTag("Player");
         if (Player.transform.position.x >= x_range[0] && Player.transform.position.x <= x_range[1])
         {
             if (Player.transform.position.y >= y_range[0] && Player.transform.position.y <= y_range[1])
