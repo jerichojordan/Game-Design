@@ -4,7 +4,7 @@ using Unity.Burst.CompilerServices;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-public class Player : MonoBehaviour
+public class Player : MonoBehaviour, IHittable
 {
     [SerializeField] private float _speed = 2f;
     [SerializeField] private Transform _gunPoint;
@@ -12,6 +12,7 @@ public class Player : MonoBehaviour
     [SerializeField] private float _weaponRange = 10f;
     [SerializeField] private AudioClip _gunShot;
     [SerializeField] private GameObject _CrosshairSprite;
+    [SerializeField] private float HitPoint = 100f;
 
     public Animator animator;
     public float Damage = 35f;
@@ -106,6 +107,19 @@ public class Player : MonoBehaviour
             var pos = _gunPoint.position + transform.right*15f;
             Crosshair.transform.position = pos;
         }
+    }
+
+    private void GetHit(RaycastHit2D hit)
+    {
+        HitPoint -= GameObject.FindGameObjectWithTag("Enemy").GetComponent<EnemyAI>().bulletForce;
+        if (HitPoint <= 0)
+        {
+            gameObject.SetActive(false);
+        }
+    }
+    public void RecieveHit(RaycastHit2D hit)
+    {
+        GetHit(hit);
     }
 }
 
