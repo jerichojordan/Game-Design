@@ -12,7 +12,7 @@ public class EnemyAI : MonoBehaviour,IHittable
     [SerializeField] private GameObject _bulletTrail;
     [SerializeField] private float _weaponRange = 10f;
     [SerializeField] private AudioClip _gunShot;
-    [SerializeField] public float bulletForce = 40f;
+    [SerializeField] private float bulletForce = 40f;
     [SerializeField] private float shootInterval = 2f;
 
     private Transform player;
@@ -63,51 +63,54 @@ public class EnemyAI : MonoBehaviour,IHittable
         transform.right = new Vector2(player.position.x, player.position.y) - new Vector2(transform.position.x, transform.position.y);
     }
 
-    private void GetHit(RaycastHit2D hit)
+    private void GetHit(RaycastHit2D hit,float damage)
     {
-        HitPoint -= GameObject.FindGameObjectWithTag("Player").GetComponent<Player>().Damage;
+        HitPoint -= damage;
         if(HitPoint <= 0)
         {
             gameObject.SetActive(false);
         }
     }
-    public void RecieveHit(RaycastHit2D hit)
+    public void RecieveHit(RaycastHit2D hit, float damage)
     {
-        GetHit(hit);
+        GetHit(hit,damage);
     }
 
     private void Shoot()
     {
-        
-        
-            AudioSource.PlayClipAtPoint(_gunShot, Camera.main.transform.position);
-            var hit = Physics2D.Raycast(
-                _gunPoint.position,
-                transform.right,
-                _weaponRange
-                );
 
-            var trail = Instantiate(
+        var direction = new Vector2();
+        direction.x = transform.right.x + Random.Range(-0.8f, 0.8f);
+        direction.y = transform.right.y + Random.Range(-0.8f, 0.8f);
+
+        AudioSource.PlayClipAtPoint(_gunShot, Camera.main.transform.position);
+        var hit = Physics2D.Raycast(
+                _gunPoint.position,
+                direction,
+                _weaponRange
+                 );
+
+        var trail = Instantiate(
                 _bulletTrail,
                 _gunPoint.position,
                 transform.rotation
                 );
 
-            var trailScript = trail.GetComponent<BulletTrail>();
-            if (hit.collider != null)
+        var trailScript = trail.GetComponent<BulletTrail>();
+        if (hit.collider != null)
+        {
+            trailScript.setTargetPosition(hit.point);
+            var hittable = hit.collider.GetComponent<IHittable>();
+            if (hittable != null)
             {
-                trailScript.setTargetPosition(hit.point);
-                var hittable = hit.collider.GetComponent<IHittable>();
-                if (hittable != null)
-                {
-                    hittable.RecieveHit(hit);
-                }
+                    hittable.RecieveHit(hit,bulletForce);
             }
-            else
-            {
-                var endPosition = _gunPoint.position + transform.right * _weaponRange;
-                trailScript.setTargetPosition(endPosition);
-            }
+        }
+        else
+        {
+            var endPosition = _gunPoint.position + transform.right * _weaponRange;
+            trailScript.setTargetPosition(endPosition);
+        }
         
     }
 }

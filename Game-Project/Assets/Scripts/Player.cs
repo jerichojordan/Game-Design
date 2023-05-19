@@ -15,7 +15,7 @@ public class Player : MonoBehaviour, IHittable
     [SerializeField] private float HitPoint = 100f;
 
     public Animator animator;
-    public float Damage = 35f;
+    private float Damage = 35f;
     public float location;
 
     private Rigidbody2D _rigidbody;
@@ -81,7 +81,7 @@ public class Player : MonoBehaviour, IHittable
                 var hittable = hit.collider.GetComponent<IHittable>();
                 if( hittable != null )
                 {
-                    hittable.RecieveHit(hit);
+                    hittable.RecieveHit(hit, Damage);
                 }
             }
             else
@@ -109,17 +109,17 @@ public class Player : MonoBehaviour, IHittable
         }
     }
 
-    private void GetHit(RaycastHit2D hit)
+    private void GetHit(RaycastHit2D hit, float damage)
     {
-        HitPoint -= GameObject.FindGameObjectWithTag("Enemy").GetComponent<EnemyAI>().bulletForce;
+        HitPoint -= damage;
         if (HitPoint <= 0)
         {
             gameObject.SetActive(false);
         }
     }
-    public void RecieveHit(RaycastHit2D hit)
+    public void RecieveHit(RaycastHit2D hit, float damage)
     {
-        GetHit(hit);
+        GetHit(hit, damage);
     }
 }
 
