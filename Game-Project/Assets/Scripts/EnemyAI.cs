@@ -14,6 +14,7 @@ public class EnemyAI : MonoBehaviour,IHittable
     [SerializeField] private AudioClip _gunShot;
     [SerializeField] private float bulletForce = 40f;
     [SerializeField] private float shootInterval = 2f;
+    [SerializeField] private float accuracy = 0.8f;
 
     private Transform player;
     private GameObject player_rb;
@@ -80,8 +81,8 @@ public class EnemyAI : MonoBehaviour,IHittable
     {
 
         var direction = new Vector2();
-        direction.x = transform.right.x + Random.Range(-0.8f, 0.8f);
-        direction.y = transform.right.y + Random.Range(-0.8f, 0.8f);
+        direction.x = transform.right.x + Random.Range(-accuracy, accuracy);
+        direction.y = transform.right.y + Random.Range(-accuracy, accuracy);
 
         AudioSource.PlayClipAtPoint(_gunShot, Camera.main.transform.position);
         var hit = Physics2D.Raycast(
