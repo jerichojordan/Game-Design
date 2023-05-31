@@ -20,12 +20,15 @@ public class EnemyAI : MonoBehaviour,IHittable
     private GameObject player_rb;
     private Rigidbody2D rb;
     private float shootTimer;
+    public Animator animator;
 
     public float location;
+    private bool isDead;
     
 
     void Start()
     {
+        isDead = false;
         player_rb = GameObject.FindGameObjectWithTag("Player");
         player = player_rb.transform;
         rb = this.GetComponent<Rigidbody2D>();
@@ -34,13 +37,15 @@ public class EnemyAI : MonoBehaviour,IHittable
 
     void Update()
     {
-        if (player_rb.GetComponent<Player>().location==location) {
-            moveTowardPlayer();
-            shootTimer -= Time.deltaTime;
-            if (shootTimer <= 0f)
-            {
-                Shoot();
-                shootTimer = shootInterval; // Reset the timer
+        if (!isDead) {
+            if (player_rb.GetComponent<Player>().location==location) {
+                moveTowardPlayer();
+                shootTimer -= Time.deltaTime;
+                if (shootTimer <= 0f)
+                {
+                    Shoot();
+                    shootTimer = shootInterval; // Reset the timer
+                }
             }
         }
     }
@@ -59,7 +64,7 @@ public class EnemyAI : MonoBehaviour,IHittable
         {
             transform.position = Vector2.MoveTowards(transform.position, player.position, -speed * Time.deltaTime);
         }
-
+        animator.SetFloat("Speed", Mathf.Abs(rb.velocity[0]) + Mathf.Abs(rb.velocity[1]));
         //Facing Sledge
         transform.right = new Vector2(player.position.x, player.position.y) - new Vector2(transform.position.x, transform.position.y);
     }
@@ -69,7 +74,8 @@ public class EnemyAI : MonoBehaviour,IHittable
         HitPoint -= damage;
         if(HitPoint <= 0)
         {
-            gameObject.SetActive(false);
+            isDead= true;
+            animator.SetBool("isDead", true);
         }
     }
     public void RecieveHit(RaycastHit2D hit, float damage)
@@ -84,7 +90,7 @@ public class EnemyAI : MonoBehaviour,IHittable
         direction.x = transform.right.x + Random.Range(-accuracy, accuracy);
         direction.y = transform.right.y + Random.Range(-accuracy, accuracy);
 
-        AudioSource.PlayClipAtPoint(_gunShot, Camera.main.transform.position);
+        AudioSource.PlayClipAtPoint(_gunShot, transform.position);
         var hit = Physics2D.Raycast(
                 _gunPoint.position,
                 direction,

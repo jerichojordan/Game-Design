@@ -75,7 +75,7 @@ public class Player : MonoBehaviour, IHittable
     {
         if(Input.GetMouseButtonDown(0))
         {
-            AudioSource.PlayClipAtPoint(_gunShot, Camera.main.transform.position);
+            AudioSource.PlayClipAtPoint(_gunShot, transform.position);
             animator.SetTrigger("Shoot");
             var hit = Physics2D.Raycast(
                 _gunPoint.position,
@@ -140,7 +140,7 @@ public class Player : MonoBehaviour, IHittable
     private void Reload()
     {
         if (isReloading) return; // Ignore if already reloading
-        AudioSource.PlayClipAtPoint(_reloadSound, Camera.main.transform.position);
+        AudioSource.PlayClipAtPoint(_reloadSound, transform.position);
         isReloading = true;
         Debug.Log("Reloading...");
 
