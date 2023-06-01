@@ -12,8 +12,18 @@ public class FloorScript : MonoBehaviour
     bool visited = false;
     void Start()
     {
-        x_range = new Vector2(transform.position.x - (0.5f * transform.localScale.x), transform.position.x + (0.5f * transform.localScale.x));
-        y_range = new Vector2(transform.position.y - (0.5f * transform.localScale.y), transform.position.y + (0.5f * transform.localScale.y));
+        var renderer = GetComponent<SpriteRenderer>();
+        var drawsize = renderer.drawMode;
+        if (renderer.drawMode == SpriteDrawMode.Tiled)
+        {
+            x_range = new Vector2(transform.position.x - (0.5f * transform.localScale.x* renderer.size.x), transform.position.x + (0.5f * transform.localScale.x*renderer.size.x));
+            y_range = new Vector2(transform.position.y - (0.5f * transform.localScale.y* renderer.size.y), transform.position.y + (0.5f * transform.localScale.y * renderer.size.y));
+        }
+        else
+        {
+            x_range = new Vector2(transform.position.x - (0.5f * transform.localScale.x), transform.position.x + (0.5f * transform.localScale.x));
+            y_range = new Vector2(transform.position.y - (0.5f * transform.localScale.y), transform.position.y + (0.5f * transform.localScale.y));
+        }
         Player = GameObject.FindGameObjectWithTag("Player");
     }
 
