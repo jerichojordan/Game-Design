@@ -13,6 +13,9 @@ public class Player : MonoBehaviour, IHittable
     [SerializeField] private AudioClip _gunShot;
     [SerializeField] private GameObject _CrosshairSprite;
     [SerializeField] private float HitPoint = 100f;
+    [SerializeField] private float maxAmmo = 30f;
+    [SerializeField] private float reloadTime = 1.5f;
+    [SerializeField] private AudioClip _reloadSound;
 
     public Animator animator;
     private float Damage = 35f;
@@ -20,6 +23,8 @@ public class Player : MonoBehaviour, IHittable
 
     private Rigidbody2D _rigidbody;
     GameObject _Crosshair;
+    private float currentAmmo;
+    private bool isReloading;
 
 
     void Start()
@@ -31,6 +36,8 @@ public class Player : MonoBehaviour, IHittable
                crossPos,
                transform.rotation
                );
+        isReloading = false;
+        currentAmmo = maxAmmo;
     }
 
     
@@ -39,7 +46,15 @@ public class Player : MonoBehaviour, IHittable
         CrosshairPositioning(_Crosshair);
         LookAtMouse();
         Move();
-        Shoot();
+        if (currentAmmo > 0)
+        {
+            Shoot();
+        }else if (currentAmmo <= 0 && !isReloading) {
+            Reload();
+        }
+        if(Input.GetKeyDown(KeyCode.R) && currentAmmo < maxAmmo) {
+            Reload();
+        }
     }
 
     //Function too make the player looking at the mouse cursor
@@ -60,7 +75,7 @@ public class Player : MonoBehaviour, IHittable
     {
         if(Input.GetMouseButtonDown(0))
         {
-            AudioSource.PlayClipAtPoint(_gunShot, Camera.main.transform.position);
+            AudioSource.PlayClipAtPoint(_gunShot, transform.position);
             animator.SetTrigger("Shoot");
             var hit = Physics2D.Raycast(
                 _gunPoint.position,
@@ -89,6 +104,7 @@ public class Player : MonoBehaviour, IHittable
                 var endPosition = _gunPoint.position + transform.right * _weaponRange;
                 trailScript.setTargetPosition(endPosition);
             }
+            currentAmmo--;
         }
     }
     private void CrosshairPositioning(GameObject Crosshair)
@@ -120,6 +136,26 @@ public class Player : MonoBehaviour, IHittable
     public void RecieveHit(RaycastHit2D hit, float damage)
     {
         GetHit(hit, damage);
+    }
+    private void Reload()
+    {
+        if (isReloading) return; // Ignore if already reloading
+        AudioSource.PlayClipAtPoint(_reloadSound, transform.position);
+        isReloading = true;
+        Debug.Log("Reloading...");
+
+        // Perform the reload logic
+        // For example, you can play a reload animation or wait for a certain amount of time
+
+        // After the reload time has passed
+        Invoke("FinishReload", reloadTime);
+    }
+
+    private void FinishReload()
+    {
+        currentAmmo = maxAmmo;
+        isReloading = false;
+        Debug.Log("Reload complete!");
     }
 }
 
