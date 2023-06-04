@@ -12,6 +12,6 @@ public class buttons : MonoBehaviour
 
     public void QuitGame()
     {
-        SceneManager.Quit();
+        Application.Quit();
     }
 }
