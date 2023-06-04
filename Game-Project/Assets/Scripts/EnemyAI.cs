@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class EnemyAI : MonoBehaviour,IHittable
@@ -15,6 +16,7 @@ public class EnemyAI : MonoBehaviour,IHittable
     [SerializeField] private float bulletForce = 40f;
     [SerializeField] private float shootInterval = 2f;
     [SerializeField] private float accuracy = 0.8f;
+    [SerializeField] private AudioClip _foodStep;
 
     private Transform player;
     private GameObject player_rb;
@@ -24,6 +26,7 @@ public class EnemyAI : MonoBehaviour,IHittable
 
     public float location;
     private bool isDead;
+    private float stepInterval;
     
 
     void Start()
@@ -33,10 +36,12 @@ public class EnemyAI : MonoBehaviour,IHittable
         player = player_rb.transform;
         rb = this.GetComponent<Rigidbody2D>();
         shootTimer = shootInterval;
+        stepInterval = 0.5f;
     }
 
     void Update()
     {
+        stepInterval -= Time.deltaTime;
         if (!isDead) {
             if (player_rb.GetComponent<Player>().location==location) {
                 moveTowardPlayer();
@@ -67,6 +72,11 @@ public class EnemyAI : MonoBehaviour,IHittable
         animator.SetFloat("Speed", Mathf.Abs(rb.velocity[0]) + Mathf.Abs(rb.velocity[1]));
         //Facing Sledge
         transform.right = new Vector2(player.position.x, player.position.y) - new Vector2(transform.position.x, transform.position.y);
+        if (Mathf.Abs(rb.velocity[0]) + Mathf.Abs(rb.velocity[1]) > 0 && stepInterval<=0)
+        {
+            AudioSource.PlayClipAtPoint(_foodStep, transform.position);
+            stepInterval = 0.4f;
+        }
     }
 
     private void GetHit(RaycastHit2D hit,float damage)
@@ -76,6 +86,7 @@ public class EnemyAI : MonoBehaviour,IHittable
         {
             isDead= true;
             this.gameObject.layer = LayerMask.NameToLayer("Ignore Raycast"); 
+            this.gameObject.GetComponent<CircleCollider2D>().enabled = false;
             animator.SetBool("isDead", true);
         }
     }
