@@ -75,7 +75,9 @@ public class EnemyAI : MonoBehaviour,IHittable
         if(HitPoint <= 0)
         {
             isDead= true;
-            this.gameObject.layer = LayerMask.NameToLayer("Ignore Raycast"); 
+            this.gameObject.layer = LayerMask.NameToLayer("Ignore Raycast");
+            Destroy(this.GetComponent<Rigidbody2D>());
+            Destroy(this.GetComponent<CircleCollider2D>());
             animator.SetBool("isDead", true);
         }
     }
