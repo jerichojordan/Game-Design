@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Xml.Serialization;
 using Unity.Burst.CompilerServices;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -16,6 +17,8 @@ public class Player : MonoBehaviour, IHittable
     [SerializeField] private float maxAmmo = 30f;
     [SerializeField] private float reloadTime = 1.5f;
     [SerializeField] private AudioClip _reloadSound;
+    [SerializeField] private AudioClip _foodStepIn;
+    [SerializeField] private AudioClip _foodStepOut;
 
     public Animator animator;
     private float Damage = 35f;
@@ -25,6 +28,7 @@ public class Player : MonoBehaviour, IHittable
     GameObject _Crosshair;
     private float currentAmmo;
     private bool isReloading;
+    private float stepInterval;
 
 
     void Start()
@@ -38,11 +42,13 @@ public class Player : MonoBehaviour, IHittable
                );
         isReloading = false;
         currentAmmo = maxAmmo;
+        stepInterval = 0.5f;
     }
 
     
     void Update()
     {
+        stepInterval -= Time.deltaTime;
         CrosshairPositioning(_Crosshair);
         LookAtMouse();
         Move();
@@ -69,6 +75,25 @@ public class Player : MonoBehaviour, IHittable
         var input = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
         _rigidbody.velocity = input.normalized * _speed;
         animator.SetFloat("speed", Mathf.Abs(_rigidbody.velocity[0]) + Mathf.Abs(_rigidbody.velocity[1]));
+        if(Mathf.Abs(_rigidbody.velocity[0]) + Mathf.Abs(_rigidbody.velocity[1]) > 0)
+        {
+            stepSound();
+        }
+    }
+    private void stepSound()
+    {
+        if (stepInterval <= 0)
+        {
+            if (location == 0)
+            {
+                AudioSource.PlayClipAtPoint(_foodStepOut, transform.position);
+            }
+            else
+            {
+                AudioSource.PlayClipAtPoint(_foodStepIn, transform.position);
+            }
+            stepInterval = 0.4f;
+        }
     }
 
     private void Shoot()
