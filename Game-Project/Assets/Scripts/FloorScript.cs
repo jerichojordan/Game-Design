@@ -34,12 +34,8 @@ public class FloorScript : MonoBehaviour
         {
             if (Player.transform.position.y >= y_range[0] && Player.transform.position.y <= y_range[1])
             {
-                if(shadow)
-                {
-                    shadow.GetComponent<Animator>().SetTrigger("Visited");
-                    visited = true;
-                }
-                
+                shadow.GetComponent<Animator>().SetTrigger("Visited");
+                visited = true;
             }
         }
         detectEnemies();
