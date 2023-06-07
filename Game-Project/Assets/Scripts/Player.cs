@@ -25,6 +25,7 @@ public class Player : MonoBehaviour, IHittable
     GameObject _Crosshair;
     private float currentAmmo;
     private bool isReloading;
+    private LevelFinish levelFinish;
 
 
     void Start()
@@ -38,6 +39,7 @@ public class Player : MonoBehaviour, IHittable
                );
         isReloading = false;
         currentAmmo = maxAmmo;
+        levelFinish = GameObject.FindGameObjectWithTag("Finish").GetComponent<LevelFinish>();
     }
 
     
@@ -130,6 +132,7 @@ public class Player : MonoBehaviour, IHittable
         HitPoint -= damage;
         if (HitPoint <= 0)
         {
+            levelFinish.GameOver();
             gameObject.SetActive(false);
         }
     }

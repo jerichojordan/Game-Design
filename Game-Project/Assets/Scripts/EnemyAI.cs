@@ -24,6 +24,7 @@ public class EnemyAI : MonoBehaviour,IHittable
 
     public float location;
     private bool isDead;
+    private GameManager gameManager;
     
 
     void Start()
@@ -33,6 +34,7 @@ public class EnemyAI : MonoBehaviour,IHittable
         player = player_rb.transform;
         rb = this.GetComponent<Rigidbody2D>();
         shootTimer = shootInterval;
+        gameManager = GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManager>();
     }
 
     void Update()
@@ -79,6 +81,7 @@ public class EnemyAI : MonoBehaviour,IHittable
             Destroy(this.GetComponent<Rigidbody2D>());
             Destroy(this.GetComponent<CircleCollider2D>());
             animator.SetBool("isDead", true);
+            gameManager.enemyKilledInc();
         }
     }
     public void RecieveHit(RaycastHit2D hit, float damage)
