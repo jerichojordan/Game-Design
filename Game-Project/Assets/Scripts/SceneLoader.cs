@@ -1,10 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
-using UnityEditor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class buttons : MonoBehaviour
+public class SceneLoader : MonoBehaviour
 {
     public void StartGame()
     {
@@ -13,6 +12,7 @@ public class buttons : MonoBehaviour
 
     public void QuitGame()
     {
-        EditorApplication.ExitPlaymode();
+        Application.Quit();
+        Debug.Log("Quit!");
     }
 }
