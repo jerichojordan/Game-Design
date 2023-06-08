@@ -1,3 +1,4 @@
+using Cinemachine;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -8,12 +9,11 @@ public class PauseMenu : MonoBehaviour
     [SerializeField] private GameObject PauseMenuUI;
     public bool isPaused;
     private GameObject Player;
-    private GameObject Camera;
+    [SerializeField] GameObject Campos;
     // Update is called once per frame
     private void Start()
     {
         Player = GameObject.FindGameObjectWithTag("Player");
-        Camera = GameObject.FindGameObjectWithTag("MainCamera");
         isPaused = false;
         DeactivateMenu();
 
@@ -35,21 +35,21 @@ public class PauseMenu : MonoBehaviour
     }
     public void ActivateMenu()
     {
-        Time.timeScale = 0;
+        Time.timeScale = 0f;
         AudioListener.pause = true;
         PauseMenuUI.SetActive(true);
         Player.GetComponent<Player>().enabled = false;
-        Camera.GetComponent<CameraTargetting>().enabled = false;
+        Campos.SetActive(false);
     }
 
     public void DeactivateMenu()
     {
-        Time.timeScale = 1;
+        Time.timeScale = 1f;
         AudioListener.pause = false;
         PauseMenuUI.SetActive(false);
         isPaused = false;
         Player.GetComponent<Player>().enabled = true;
-        Camera.GetComponent<CameraTargetting>().enabled = true;
+        Campos.SetActive(true);
     }
 
     public void MainMenu()
