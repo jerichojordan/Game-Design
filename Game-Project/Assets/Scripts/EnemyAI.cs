@@ -93,8 +93,8 @@ public class EnemyAI : MonoBehaviour,IHittable
     {
 
         var direction = new Vector2();
-        direction.x = transform.right.x + Random.Range(-accuracy, accuracy);
-        direction.y = transform.right.y + Random.Range(-accuracy, accuracy);
+        direction.x = player.position.x -(transform.position.x + Random.Range(-accuracy, accuracy));
+        direction.y = player.position.y -(transform.position.y + Random.Range(-accuracy, accuracy));
 
         AudioSource.PlayClipAtPoint(_gunShot, transform.position);
         var hit = Physics2D.Raycast(
