@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using Unity.Burst.CompilerServices;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -20,13 +21,14 @@ public class Player : MonoBehaviour, IHittable
     public Animator animator;
     private float Damage = 35f;
     public float location;
-
+    
     private Rigidbody2D _rigidbody;
     GameObject _Crosshair;
     private float currentAmmo;
     private bool isReloading;
     private LevelFinish levelFinish;
-
+    private bool isSprinting;
+    private float currentspeed;
 
     void Start()
     {
@@ -57,6 +59,14 @@ public class Player : MonoBehaviour, IHittable
         if(Input.GetKeyDown(KeyCode.R) && currentAmmo < maxAmmo) {
             Reload();
         }
+        if (Input.GetKey(KeyCode.LeftShift))
+        {
+            isSprinting = true;
+        }
+        else
+        {
+            isSprinting = false;
+        }
     }
 
     //Function too make the player looking at the mouse cursor
@@ -69,13 +79,15 @@ public class Player : MonoBehaviour, IHittable
     private void Move()
     {
         var input = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
-        _rigidbody.velocity = input.normalized * _speed;
+        if (isSprinting) currentspeed = (5+ _speed);
+        else currentspeed = _speed;
+        _rigidbody.velocity = input.normalized * currentspeed;
         animator.SetFloat("speed", Mathf.Abs(_rigidbody.velocity[0]) + Mathf.Abs(_rigidbody.velocity[1]));
     }
 
     private void Shoot()
     {
-        if(Input.GetMouseButtonDown(0))
+        if(Input.GetMouseButtonDown(0)&&isSprinting==false)
         {
             AudioSource.PlayClipAtPoint(_gunShot, transform.position);
             animator.SetTrigger("Shoot");
