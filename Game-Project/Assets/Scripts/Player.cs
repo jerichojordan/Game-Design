@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using Unity.Burst.CompilerServices;
 using UnityEngine;
+using UnityEngine.Rendering.Universal;
 using UnityEngine.UIElements;
 
 public class Player : MonoBehaviour, IHittable
@@ -17,7 +18,7 @@ public class Player : MonoBehaviour, IHittable
     [SerializeField] private float maxAmmo = 30f;
     [SerializeField] private float reloadTime = 1.5f;
     [SerializeField] private AudioClip _reloadSound;
-
+    [SerializeField] private GameObject Flashlight;
     public Animator animator;
     private float Damage = 35f;
     public float location;
@@ -28,7 +29,9 @@ public class Player : MonoBehaviour, IHittable
     private bool isReloading;
     private LevelFinish levelFinish;
     private bool isSprinting;
+    private bool onFlashlight;
     private float currentspeed;
+    
 
     void Start()
     {
@@ -41,7 +44,9 @@ public class Player : MonoBehaviour, IHittable
                );
         isReloading = false;
         currentAmmo = maxAmmo;
+        onFlashlight = true;
         levelFinish = GameObject.FindGameObjectWithTag("Finish").GetComponent<LevelFinish>();
+        Flashlight = this.transform.Find("Light 2D").gameObject;
     }
 
     
@@ -66,6 +71,10 @@ public class Player : MonoBehaviour, IHittable
         else
         {
             isSprinting = false;
+        }
+        if(Input.GetKeyDown(KeyCode.F))
+        {
+            flashlight();
         }
     }
 
@@ -171,6 +180,20 @@ public class Player : MonoBehaviour, IHittable
         currentAmmo = maxAmmo;
         isReloading = false;
         Debug.Log("Reload complete!");
+    }
+
+    private void flashlight()
+    {
+        if (onFlashlight)
+        {
+            Flashlight.SetActive(false);
+            onFlashlight = false;
+        }
+        else
+        {
+            Flashlight.SetActive(true);
+            onFlashlight = true;
+        }
     }
 }
 
