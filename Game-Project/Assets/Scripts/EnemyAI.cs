@@ -15,13 +15,19 @@ public class EnemyAI : MonoBehaviour,IHittable
     [SerializeField] private float bulletForce = 40f;
     [SerializeField] private float shootInterval = 2f;
     [SerializeField] private float accuracy = 0.8f;
+    [SerializeField] private float maxAmmo = 12f;
+    [SerializeField] private AudioClip _reloadSound;
+    [SerializeField] private float reloadTime;
+    [SerializeField] private float minimalDist = 3f;
 
     private Transform player;
     private GameObject player_rb;
     private Rigidbody2D rb;
     private float shootTimer;
-    public Animator animator;
+    private bool isReloading;
+    private float currentAmmo;
 
+    public Animator animator;
     public float location;
     private bool isDead;
     private GameManager gameManager;
@@ -35,19 +41,25 @@ public class EnemyAI : MonoBehaviour,IHittable
         rb = this.GetComponent<Rigidbody2D>();
         shootTimer = shootInterval;
         gameManager = GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManager>();
+        currentAmmo = maxAmmo;
+        isReloading = false;
     }
 
     void Update()
     {
         if (!isDead) {
-            if (player_rb.GetComponent<Player>().location==location) {
+            if (player_rb.GetComponent<Player>().location==location && Vector3.Distance(player_rb.transform.position,this.transform.position)<=minimalDist) {
                 moveTowardPlayer();
                 shootTimer -= Time.deltaTime;
-                if (shootTimer <= 0f)
+                if (shootTimer <= 0f && currentAmmo > 0)
                 {
                     Shoot();
                     shootTimer = shootInterval; // Reset the timer
+                }else if(currentAmmo <= 0 && !isReloading)
+                {
+                    Reload();
                 }
+               
             }
         }
     }
@@ -124,6 +136,28 @@ public class EnemyAI : MonoBehaviour,IHittable
             var endPosition = _gunPoint.position + transform.right * _weaponRange;
             trailScript.setTargetPosition(endPosition);
         }
+        currentAmmo--;
         
+    }
+
+    private void Reload()
+    {
+        if (isReloading) return; // Ignore if already reloading
+        AudioSource.PlayClipAtPoint(_reloadSound, transform.position);
+        isReloading = true;
+        Debug.Log("Reloading...");
+
+        // Perform the reload logic
+        // For example, you can play a reload animation or wait for a certain amount of time
+
+        // After the reload time has passed
+        Invoke("FinishReload", reloadTime);
+    }
+
+    private void FinishReload()
+    {
+        currentAmmo = maxAmmo;
+        isReloading = false;
+        Debug.Log("Reload complete!");
     }
 }
