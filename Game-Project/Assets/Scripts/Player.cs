@@ -153,8 +153,8 @@ public class Player : MonoBehaviour, IHittable
         HitPoint -= damage;
         if (HitPoint <= 0)
         {
+            this.gameObject.SetActive(false);
             levelFinish.GameOver();
-            gameObject.SetActive(false);
         }
     }
     public void RecieveHit(RaycastHit2D hit, float damage)
