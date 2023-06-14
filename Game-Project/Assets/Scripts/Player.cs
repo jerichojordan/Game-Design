@@ -14,7 +14,7 @@ public class Player : MonoBehaviour, IHittable
     [SerializeField] private float _weaponRange = 10f;
     [SerializeField] private AudioClip _gunShot;
     [SerializeField] private GameObject _CrosshairSprite;
-    [SerializeField] private float HitPoint = 100f;
+    [SerializeField] public float HitPoint = 100f;
     [SerializeField] private float maxAmmo = 30f;
     [SerializeField] private float reloadTime = 1.5f;
     [SerializeField] private AudioClip _reloadSound;
@@ -25,7 +25,7 @@ public class Player : MonoBehaviour, IHittable
     
     private Rigidbody2D _rigidbody;
     GameObject _Crosshair;
-    private float currentAmmo;
+    public float currentAmmo;
     private bool isReloading;
     private LevelFinish levelFinish;
     private bool isSprinting;
