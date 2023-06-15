@@ -12,7 +12,7 @@ public class EnemyAI : MonoBehaviour,IHittable
     [SerializeField] private GameObject _bulletTrail;
     [SerializeField] private float _weaponRange = 10f;
     [SerializeField] private AudioClip _gunShot;
-    [SerializeField] private float bulletForce = 40f;
+    [SerializeField] private float bulletForce = 10f;
     [SerializeField] private float shootInterval = 2f;
     [SerializeField] private float accuracy = 0.8f;
 

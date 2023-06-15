@@ -66,7 +66,7 @@ public class PauseMenu : MonoBehaviour
     public void MainMenu()
     {
         DeactivateMenu();
-        SceneManager.LoadScene(0);
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
     public void VolumeSlider(float volume)
     {
