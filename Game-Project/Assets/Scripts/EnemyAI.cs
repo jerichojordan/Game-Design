@@ -31,10 +31,7 @@ public class EnemyAI : MonoBehaviour,IHittable
     public float location;
     private bool isDead;
     private GameManager gameManager;
-
-    //EnemyCounter
-    private EnemyCounter enemyCounter;
-
+    
 
     void Start()
     {
@@ -46,11 +43,6 @@ public class EnemyAI : MonoBehaviour,IHittable
         gameManager = GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManager>();
         currentAmmo = maxAmmo;
         isReloading = false;
-
-        //EnemyCounter
-        enemyCounter = GameObject.FindObjectOfType<EnemyCounter>();
-
-
     }
 
     void Update()
@@ -102,14 +94,11 @@ public class EnemyAI : MonoBehaviour,IHittable
             Destroy(this.GetComponent<CircleCollider2D>());
             animator.SetBool("isDead", true);
             gameManager.enemyKilledInc();
-            //EnemyCounter
-            enemyCounter.EnemyKilled();
         }
     }
     public void RecieveHit(RaycastHit2D hit, float damage)
     {
         GetHit(hit,damage);
-        Debug.Log("RecieveHit called");
     }
 
     private void Shoot()
