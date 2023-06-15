@@ -21,9 +21,8 @@ public class PauseMenu : MonoBehaviour
     private void Start()
     {
         Player = GameObject.FindGameObjectWithTag("Player");
-        isPaused = true;
-        ActivateMenu();
-        PauseMenuUI.SetActive(false);
+        isPaused = false;
+        DeactivateMenu();
         LoadValues();
         SettingUI.SetActive(false);
 
