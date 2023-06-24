@@ -55,7 +55,7 @@ public class Player : MonoBehaviour, IHittable
         CrosshairPositioning(_Crosshair);
         LookAtMouse();
         Move();
-        if (currentAmmo > 0)
+        if (currentAmmo > 0 && !isReloading)
         {
             Shoot();
         }else if (currentAmmo <= 0 && !isReloading) {
