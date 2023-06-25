@@ -26,6 +26,7 @@ public class EnemyAI : MonoBehaviour,IHittable
     public float location;
     private bool isDead;
     private GameManager gameManager;
+    private float first;
 
     //EnemyCounter
     private EnemyCounter enemyCounter;
@@ -42,6 +43,7 @@ public class EnemyAI : MonoBehaviour,IHittable
         gameManager = GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManager>();
         //EnemyCounter
         enemyCounter = GameObject.FindObjectOfType<EnemyCounter>();
+        first = 0;
 
     }
 
@@ -51,13 +53,18 @@ public class EnemyAI : MonoBehaviour,IHittable
             if (player_rb.GetComponent<Player>().location==location) {
                 if (!isLocated)
                 {
-                    AudioSource.PlayClipAtPoint(firstcontact,this.gameObject.transform.position);
+                    if (first == 0)
+                    {
+                        AudioSource.PlayClipAtPoint(firstcontact, this.gameObject.transform.position);
+                        first++;
+                    }
                     isLocated = true;
                 }
                 moveTowardPlayer();
                 shootTimer -= Time.deltaTime;
                 if (shootTimer <= 0f)
                 {
+                    AudioSource.PlayClipAtPoint(firstcontact, this.gameObject.transform.position);
                     Shoot();
                     shootTimer = shootInterval; // Reset the timer
                 }
