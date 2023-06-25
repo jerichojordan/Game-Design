@@ -16,6 +16,8 @@ public class EnemyAI : MonoBehaviour,IHittable
     [SerializeField] private float shootInterval = 2f;
     [SerializeField] private float accuracy = 0.8f;
     [SerializeField] private AudioClip firstcontact;
+    [SerializeField] private AudioClip scream;
+    [SerializeField] private AudioClip dead;
     private Transform player;
     private GameObject player_rb;
     private Rigidbody2D rb;
@@ -94,10 +96,12 @@ public class EnemyAI : MonoBehaviour,IHittable
     private void GetHit(RaycastHit2D hit,float damage)
     {
         HitPoint -= damage;
-        if(HitPoint <= 0)
+        AudioSource.PlayClipAtPoint(scream, this.gameObject.transform.position);
+        if (HitPoint <= 0)
         {
             isDead= true;
             this.gameObject.layer = LayerMask.NameToLayer("Ignore Raycast");
+            AudioSource.PlayClipAtPoint(dead, this.gameObject.transform.position);
             Destroy(this.GetComponent<Rigidbody2D>());
             Destroy(this.GetComponent<CircleCollider2D>());
             animator.SetBool("isDead", true);
