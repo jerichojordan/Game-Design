@@ -15,13 +15,14 @@ public class EnemyAI : MonoBehaviour,IHittable
     [SerializeField] private float bulletForce = 10f;
     [SerializeField] private float shootInterval = 2f;
     [SerializeField] private float accuracy = 0.8f;
-
+    [SerializeField] private AudioClip firstcontact;
     private Transform player;
     private GameObject player_rb;
     private Rigidbody2D rb;
     private float shootTimer;
     public Animator animator;
 
+    private bool isLocated;
     public float location;
     private bool isDead;
     private GameManager gameManager;
@@ -33,6 +34,7 @@ public class EnemyAI : MonoBehaviour,IHittable
     void Start()
     {
         isDead = false;
+        isLocated = false;
         player_rb = GameObject.FindGameObjectWithTag("Player");
         player = player_rb.transform;
         rb = this.GetComponent<Rigidbody2D>();
@@ -47,6 +49,11 @@ public class EnemyAI : MonoBehaviour,IHittable
     {
         if (!isDead) {
             if (player_rb.GetComponent<Player>().location==location) {
+                if (!isLocated)
+                {
+                    AudioSource.PlayClipAtPoint(firstcontact,this.gameObject.transform.position);
+                    isLocated = true;
+                }
                 moveTowardPlayer();
                 shootTimer -= Time.deltaTime;
                 if (shootTimer <= 0f)
@@ -88,6 +95,7 @@ public class EnemyAI : MonoBehaviour,IHittable
             Destroy(this.GetComponent<CircleCollider2D>());
             animator.SetBool("isDead", true);
             gameManager.enemyKilledInc();
+            this.tag = "Untagged";
             //EnemyCounter
             enemyCounter.EnemyKilled();
         }
