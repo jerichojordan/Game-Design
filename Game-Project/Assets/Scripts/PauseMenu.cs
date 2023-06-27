@@ -1,18 +1,15 @@
-using Cinemachine;
-using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
+
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class PauseMenu : MonoBehaviour
 {
-    [SerializeField] private GameObject PauseMenuUI;
-    [SerializeField] GameObject Campos;
-    [SerializeField] private GameObject SettingUI;
-    [SerializeField] private Slider volumeSlider;
-    [SerializeField] private Text VolumeText;
+    [SerializeField] private GameObject PauseMenuUI = null;
+    [SerializeField] GameObject Campos = null;
+    [SerializeField] private GameObject SettingUI = null;
+    [SerializeField] private Slider volumeSlider = null;
+    [SerializeField] private Text VolumeText = null;
 
 
     public bool isPaused;
@@ -72,6 +69,7 @@ public class PauseMenu : MonoBehaviour
     {
         VolumeText.text = volume.ToString("0.0");
         volumeSlider.value = volume;
+        AudioListener.volume = volume;
     }
     public void saveVolumeButton()
     {
