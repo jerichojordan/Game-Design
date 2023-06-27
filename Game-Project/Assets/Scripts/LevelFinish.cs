@@ -47,6 +47,10 @@ public class LevelFinish : MonoBehaviour
     {
         TutorialUI.SetActive(true);
         PlayerUI.SetActive(false);
+        Time.timeScale = 0f;
+        AudioListener.pause = true;
+        Player.GetComponent<Player>().enabled = false;
+        Campos.SetActive(false);
     }
     public void deactivateTutorial()
     {
