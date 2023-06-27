@@ -179,6 +179,7 @@ public class Player : MonoBehaviour, IHittable
     {
         currentAmmo = maxAmmo;
         isReloading = false;
+        AudioSource.PlayClipAtPoint(_reloadSound, transform.position);
         Debug.Log("Reload complete!");
     }
 

@@ -10,6 +10,8 @@ public class EnemyAI : MonoBehaviour,IHittable
     [SerializeField] private float HitPoint = 100f;
     [SerializeField] private Transform _gunPoint;
     [SerializeField] private GameObject _bulletTrail;
+    [SerializeField] private GameObject _hitBlood;
+    [SerializeField] private GameObject _deadBlood;
     [SerializeField] private float _weaponRange = 10f;
     [SerializeField] private AudioClip _gunShot;
     [SerializeField] private float bulletForce = 10f;
@@ -40,12 +42,14 @@ public class EnemyAI : MonoBehaviour,IHittable
         isLocated = false;
         player_rb = GameObject.FindGameObjectWithTag("Player");
         player = player_rb.transform;
-        rb = this.GetComponent<Rigidbody2D>();
+        rb = GetComponent<Rigidbody2D>();
         shootTimer = shootInterval;
         gameManager = GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManager>();
         //EnemyCounter
         enemyCounter = GameObject.FindObjectOfType<EnemyCounter>();
         first = 0;
+        _hitBlood.gameObject.SetActive(false);
+        _deadBlood.gameObject.SetActive(false);
 
     }
 
@@ -63,6 +67,7 @@ public class EnemyAI : MonoBehaviour,IHittable
                     isLocated = true;
                 }
                 moveTowardPlayer();
+                animator.SetFloat("speed", Mathf.Abs(rb.velocity[0]) + Mathf.Abs(rb.velocity[1]));
                 shootTimer -= Time.deltaTime;
                 if (shootTimer <= 0f)
                 {
@@ -88,7 +93,7 @@ public class EnemyAI : MonoBehaviour,IHittable
         {
             transform.position = Vector2.MoveTowards(transform.position, player.position, -speed * Time.deltaTime);
         }
-        animator.SetFloat("Speed", Mathf.Abs(rb.velocity[0]) + Mathf.Abs(rb.velocity[1]));
+        
         //Facing Sledge
         transform.right = new Vector2(player.position.x, player.position.y) - new Vector2(transform.position.x, transform.position.y);
     }
@@ -96,7 +101,6 @@ public class EnemyAI : MonoBehaviour,IHittable
     private void GetHit(RaycastHit2D hit,float damage)
     {
         HitPoint -= damage;
-        AudioSource.PlayClipAtPoint(scream, this.gameObject.transform.position);
         if (HitPoint <= 0)
         {
             isDead= true;
@@ -105,10 +109,17 @@ public class EnemyAI : MonoBehaviour,IHittable
             Destroy(this.GetComponent<Rigidbody2D>());
             Destroy(this.GetComponent<CircleCollider2D>());
             animator.SetBool("isDead", true);
+            _deadBlood.gameObject.SetActive(true);
             gameManager.enemyKilledInc();
             this.tag = "Untagged";
             //EnemyCounter
             enemyCounter.EnemyKilled();
+        }
+        else
+        {
+            AudioSource.PlayClipAtPoint(scream, this.gameObject.transform.position);
+            _hitBlood.gameObject.SetActive(true);
+            Invoke("deactivateBlood", 0.2f);
         }
     }
     public void RecieveHit(RaycastHit2D hit, float damage)
@@ -153,5 +164,9 @@ public class EnemyAI : MonoBehaviour,IHittable
             trailScript.setTargetPosition(endPosition);
         }
         
+    }
+    private void deactivateBlood()
+    {
+        _hitBlood.gameObject.SetActive(false);
     }
 }
