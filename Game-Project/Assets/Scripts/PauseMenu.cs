@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class PauseMenu : MonoBehaviour
 {
-    [SerializeField] private GameObject PauseMenuUI = null;
+    [SerializeField] public GameObject PauseMenuUI = null;
     [SerializeField] GameObject Campos = null;
     [SerializeField] private GameObject SettingUI = null;
     [SerializeField] private Slider volumeSlider = null;
@@ -19,7 +19,6 @@ public class PauseMenu : MonoBehaviour
     {
         Player = GameObject.FindGameObjectWithTag("Player");
         isPaused = false;
-        ActivateMenu();
         PauseMenuUI.SetActive(false);
         LoadValues();
         SettingUI.SetActive(false);
