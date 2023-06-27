@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using UnityEngine.SceneManagement;
+using System.Collections.Concurrent;
 
 public class UIManager : MonoBehaviour
 {
@@ -13,12 +15,13 @@ public class UIManager : MonoBehaviour
 
     private Player player;
     float _tmpHealth = 100f;
-
+    private int currentSceneNumber;
+    private int _enemyCount;
     private void Start()
     {
-
+        _enemyCount = GameObject.FindGameObjectsWithTag("Enemy").Length;
         player = GameObject.FindObjectOfType<Player>();
-
+        currentSceneNumber = SceneManager.GetActiveScene().buildIndex;
         // Stelle sicher, dass du deine Textfelder im Unity-Editor zuweist
         if (healthText == null || ammoText == null || missionText == null)
         {
@@ -43,8 +46,10 @@ public class UIManager : MonoBehaviour
 
         healthText.text = "Health: " + _tmpHealth;
         ammoText.text = "Ammo: " + player.currentAmmo;
+        if (currentSceneNumber == 2 && _enemyCount == 0)
+            missionText.text = "Go to the next area";
 
-        if (player.currentAmmo <= 0)
+        if (player.currentAmmo <= 2)
         {
             reloadPromptText.enabled = true;
         }
