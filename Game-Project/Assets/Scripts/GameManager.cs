@@ -40,6 +40,7 @@ public class GameManager : MonoBehaviour
     {
         yield return new WaitForSeconds(2f);
         SceneManager.LoadScene(id);
+        if (AudioListener.pause) AudioListener.pause = false;
     }
 
     public void MainMenu()

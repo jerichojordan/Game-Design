@@ -71,7 +71,7 @@ public class EnemyAI : MonoBehaviour,IHittable
                 shootTimer -= Time.deltaTime;
                 if (shootTimer <= 0f)
                 {
-                    AudioSource.PlayClipAtPoint(firstcontact, this.gameObject.transform.position);
+                    //AudioSource.PlayClipAtPoint(firstcontact, this.gameObject.transform.position);
                     Shoot();
                     shootTimer = shootInterval; // Reset the timer
                 }
