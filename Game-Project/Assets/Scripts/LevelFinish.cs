@@ -12,33 +12,43 @@ public class LevelFinish : MonoBehaviour
     [SerializeField] private GameObject TutorialUI;
     [SerializeField] private GameObject PlayerUI;
     [SerializeField] GameObject Campos;
-    [SerializeField] GameObject FinishTrigger;
     private GameObject Player;
     private GameTimer gameTimer;
-    public float _enemyCount;
-    public float _enemyKilled;
-
+    public int _enemyCount;
+    public int _enemyKilled;
+    bool isCounted;
     // Start is called before the first frame update
     void Start()
     {
         gameTimer = GameObject.FindGameObjectWithTag("UIManager").GetComponent<GameTimer>();
         if (SceneManager.GetActiveScene().buildIndex == 1)
         {
-            TutorialUI.gameObject.SetActive(true);
+            activateTutorial();
         }
         GameOverUI.SetActive(false);
         levelCompleteUI.SetActive(false);
         Campos.SetActive(true);
         Player = GameObject.FindGameObjectWithTag("Player");
-        _enemyCount = GameObject.FindGameObjectsWithTag("Enemy").Length;
+        StartCoroutine(CountEnemiesCoroutine());
+        isCounted = false;
+        //_enemyCount = GameObject.FindGameObjectsWithTag("Enemy").Length;
         _enemyKilled = 0;
     }
     private void Update()
     {
-        if (_enemyCount == _enemyKilled)
+        if (!isCounted)
         {
-            Invoke("LevelComplete", 2f);
+            _enemyCount = GameObject.FindGameObjectsWithTag("Enemy").Length;
+            isCounted = true;
+            Debug.Log("Counted" + _enemyCount);
+
         }
+        if (_enemyCount == _enemyKilled && _enemyKilled != 0)
+        {
+            Invoke(nameof(LevelComplete), 2f);
+        }
+        Debug.Log("count"+_enemyCount);
+        Debug.Log("kill" + _enemyKilled);
     }
 
     // Update is called once per frame
@@ -86,4 +96,9 @@ public class LevelFinish : MonoBehaviour
         _enemyKilled++;
     }
 
+    IEnumerator CountEnemiesCoroutine()
+    {
+        yield return 1f;
+        _enemyCount = GameObject.FindGameObjectsWithTag("Enemy").Length;
+    }
 }
