@@ -15,16 +15,30 @@ public class LevelFinish : MonoBehaviour
     [SerializeField] GameObject FinishTrigger;
     private GameObject Player;
     private GameTimer gameTimer;
+    public float _enemyCount;
+    public float _enemyKilled;
 
     // Start is called before the first frame update
     void Start()
     {
         gameTimer = GameObject.FindGameObjectWithTag("UIManager").GetComponent<GameTimer>();
-        activateTutorial();
+        if (SceneManager.GetActiveScene().buildIndex == 1)
+        {
+            TutorialUI.gameObject.SetActive(true);
+        }
         GameOverUI.SetActive(false);
         levelCompleteUI.SetActive(false);
         Campos.SetActive(true);
         Player = GameObject.FindGameObjectWithTag("Player");
+        _enemyCount = GameObject.FindGameObjectsWithTag("Enemy").Length;
+        _enemyKilled = 0;
+    }
+    private void Update()
+    {
+        if (_enemyCount == _enemyKilled)
+        {
+            Invoke("LevelComplete", 2f);
+        }
     }
 
     // Update is called once per frame
@@ -67,4 +81,9 @@ public class LevelFinish : MonoBehaviour
         TutorialUI.SetActive(false);
         PlayerUI.SetActive(true);
     }
+    public void enemyKilledInc()
+    {
+        _enemyKilled++;
+    }
+
 }

@@ -6,26 +6,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
-{
-    public float _enemyCount;
-    public float _enemyKilled;
-    LevelFinish levelFinish;
-   
-
-    void Start()
-    {
-        _enemyCount = GameObject.FindGameObjectsWithTag("Enemy").Length;
-        _enemyKilled = 0;
-        levelFinish = GameObject.FindGameObjectWithTag("Finish").GetComponent<LevelFinish>();
-    }
-
-    private void Update()
-    {
-        if(_enemyCount == _enemyKilled)
-        {
-            levelFinish.LevelComplete();
-        }
-    }
+{  
     public void StartGame()
     {
         SceneManager.LoadScene(1);
@@ -33,24 +14,22 @@ public class GameManager : MonoBehaviour
 
     public void ChangeLevel(int id)
     {
-        StartCoroutine(DoLevelChange(id));
-    }
-
-    private IEnumerator DoLevelChange(int id)
-    {
-        yield return new WaitForSeconds(2f);
         if (AudioListener.pause) AudioListener.pause = false;
-        SceneManager.LoadScene(id); 
+        Time.timeScale = 1f;
+        SceneManager.LoadScene(id);
     }
 
     public void MainMenu()
     {
+        if (AudioListener.pause) AudioListener.pause = false;
         Time.timeScale = 1f; 
         SceneManager.LoadScene(0);
     }
 
     public void Restart()
     {
+        if (AudioListener.pause) AudioListener.pause = false;
+        Time.timeScale = 1f;
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 
@@ -58,9 +37,4 @@ public class GameManager : MonoBehaviour
     {
         EditorApplication.isPlaying = false;
     }
-    public void enemyKilledInc()
-    {
-        _enemyKilled++;
-    }
-    
 }
