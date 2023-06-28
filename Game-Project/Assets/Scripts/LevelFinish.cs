@@ -14,9 +14,9 @@ public class LevelFinish : MonoBehaviour
     [SerializeField] GameObject Campos;
     private GameObject Player;
     private GameTimer gameTimer;
-    public int _enemyCount;
-    public int _enemyKilled;
-    bool isCounted;
+
+    //EnemyCounter
+    private EnemyCounter enemyCounter;
     // Start is called before the first frame update
     void Start()
     {
@@ -29,26 +29,15 @@ public class LevelFinish : MonoBehaviour
         levelCompleteUI.SetActive(false);
         Campos.SetActive(true);
         Player = GameObject.FindGameObjectWithTag("Player");
-        StartCoroutine(CountEnemiesCoroutine());
-        isCounted = false;
-        //_enemyCount = GameObject.FindGameObjectsWithTag("Enemy").Length;
-        _enemyKilled = 0;
+        enemyCounter = GameObject.FindGameObjectWithTag("UIManager").GetComponent<EnemyCounter>();
+        
     }
     private void Update()
     {
-        if (!isCounted)
-        {
-            _enemyCount = GameObject.FindGameObjectsWithTag("Enemy").Length;
-            isCounted = true;
-            Debug.Log("Counted" + _enemyCount);
-
-        }
-        if (_enemyCount == _enemyKilled && _enemyKilled != 0)
-        {
-            Invoke(nameof(LevelComplete), 2f);
-        }
-        Debug.Log("count"+_enemyCount);
-        Debug.Log("kill" + _enemyKilled);
+        if (enemyCounter.enemyCount<=0)
+         {
+            Invoke("LevelComplete", 1f);
+         }
     }
 
     // Update is called once per frame
@@ -83,22 +72,12 @@ public class LevelFinish : MonoBehaviour
         PlayerUI.SetActive(false);
         Time.timeScale = 0f;
         AudioListener.pause = true;
-        Player.GetComponent<Player>().enabled = false;
+        //Player.GetComponent<Player>().enabled = false;
         Campos.SetActive(false);
     }
     public void deactivateTutorial()
     {
         TutorialUI.SetActive(false);
         PlayerUI.SetActive(true);
-    }
-    public void enemyKilledInc()
-    {
-        _enemyKilled++;
-    }
-
-    IEnumerator CountEnemiesCoroutine()
-    {
-        yield return 1f;
-        _enemyCount = GameObject.FindGameObjectsWithTag("Enemy").Length;
     }
 }

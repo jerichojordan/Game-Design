@@ -34,7 +34,7 @@ public class EnemyAI : MonoBehaviour,IHittable
     public float location;
     private bool isDead;
     private LevelFinish levelFinish;
-    private float first;
+    private bool first;
     private bool isReloading;
 
     //EnemyCounter
@@ -49,10 +49,9 @@ public class EnemyAI : MonoBehaviour,IHittable
         player = player_rb.transform;
         rb = GetComponent<Rigidbody2D>();
         shootTimer = shootInterval;
-        levelFinish = GameObject.FindGameObjectWithTag("Finish").GetComponent<LevelFinish>();
         //EnemyCounter
         enemyCounter = GameObject.FindObjectOfType<EnemyCounter>();
-        first = 0;
+        first = true;
         _hitBlood.gameObject.SetActive(false);
         _deadBlood.gameObject.SetActive(false);
         currentBullet = maxBullet;
@@ -66,10 +65,10 @@ public class EnemyAI : MonoBehaviour,IHittable
             if (player_rb.GetComponent<Player>().location==location) {
                 if (!isLocated)
                 {
-                    if (first == 0)
+                    if (first == true)
                     {
                         AudioSource.PlayClipAtPoint(firstcontact, this.gameObject.transform.position);
-                        first++;
+                        first=false;
                     }
                     isLocated = true;
                 }
@@ -78,7 +77,6 @@ public class EnemyAI : MonoBehaviour,IHittable
                 shootTimer -= Time.deltaTime;
                 if (shootTimer <= 0f && currentBullet >=0)
                 {
-                    //AudioSource.PlayClipAtPoint(firstcontact, this.gameObject.transform.position);
                     Shoot();
                     shootTimer = shootInterval; // Reset the timer
                     currentBullet--;
@@ -121,7 +119,6 @@ public class EnemyAI : MonoBehaviour,IHittable
             Destroy(this.GetComponent<CircleCollider2D>());
             animator.SetBool("isDead", true);
             _deadBlood.gameObject.SetActive(true);
-            levelFinish.enemyKilledInc();
             this.tag = "Untagged";
             //EnemyCounter
             enemyCounter.EnemyKilled();
