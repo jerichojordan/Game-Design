@@ -9,6 +9,7 @@ public class LevelFinish : MonoBehaviour
     [SerializeField] private GameObject TutorialUI;
     [SerializeField] private GameObject PlayerUI;
     [SerializeField] GameObject Campos;
+    [SerializeField] GameObject FinishTrigger;
     private GameObject Player;
 
     // Start is called before the first frame update
@@ -37,11 +38,11 @@ public class LevelFinish : MonoBehaviour
 
     public void LevelComplete()
     {
-        Time.timeScale = 0f;
+        //Time.timeScale = 0f;
         AudioListener.pause = true;
         levelCompleteUI.SetActive(true);
-        Campos.SetActive(false);
-        Player.GetComponent<Player>().enabled = false;
+        //Campos.SetActive(false);
+        //Player.GetComponent<Player>().enabled = false;
     }
     public void activateTutorial()
     {
