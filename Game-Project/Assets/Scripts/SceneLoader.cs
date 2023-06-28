@@ -8,12 +8,12 @@ public class SceneLoader : MonoBehaviour
 {
     public void StartGame()
     {
-        SceneManager.LoadScene(2);
+        SceneManager.LoadScene(1);
     }
 
     public void CreditsGame()
     {
-        SceneManager.LoadScene(1);
+        SceneManager.LoadScene(4);
     }
 
     public void QuitGame()
