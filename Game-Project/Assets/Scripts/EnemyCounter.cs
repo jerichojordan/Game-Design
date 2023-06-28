@@ -26,6 +26,7 @@ public class EnemyCounter : MonoBehaviour
     void UpdateEnemyCountText()
     {
         // Aktualisieren Sie die Anzeige auf dem Bildschirm
-        enemyCountText.text = enemyCount + " Enemys remaining";
+        if(enemyCount == 1) enemyCountText.text = enemyCount + " Enemy remaining";
+        else enemyCountText.text = enemyCount + " Enemies remaining";
     }
 }
