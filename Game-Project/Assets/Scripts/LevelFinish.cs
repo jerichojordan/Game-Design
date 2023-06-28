@@ -1,20 +1,25 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class LevelFinish : MonoBehaviour
 {
     [SerializeField] private GameObject GameOverUI;
     [SerializeField] private GameObject levelCompleteUI;
+    [SerializeField] private Text time;
     [SerializeField] private GameObject TutorialUI;
     [SerializeField] private GameObject PlayerUI;
     [SerializeField] GameObject Campos;
     [SerializeField] GameObject FinishTrigger;
     private GameObject Player;
+    private GameTimer gameTimer;
 
     // Start is called before the first frame update
     void Start()
     {
+        gameTimer = GameObject.FindGameObjectWithTag("UIManager").GetComponent<GameTimer>();
         activateTutorial();
         GameOverUI.SetActive(false);
         levelCompleteUI.SetActive(false);
@@ -23,10 +28,6 @@ public class LevelFinish : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
-    {
-        
-    }
     public void GameOver()
     {
         Time.timeScale = 0f;
@@ -38,9 +39,17 @@ public class LevelFinish : MonoBehaviour
 
     public void LevelComplete()
     {
-        //Time.timeScale = 0f;
+        Time.timeScale = 0f;
         AudioListener.pause = true;
         levelCompleteUI.SetActive(true);
+        float level = SceneManager.GetActiveScene().buildIndex;
+        PlayerPrefs.SetFloat("Level", level);
+        float ftime = gameTimer.startTime;
+        int minutes = Mathf.FloorToInt(ftime / 60F);
+        int seconds = Mathf.FloorToInt(ftime - minutes * 60);
+
+        string text = string.Format("{0:00}:{1:00}", minutes, seconds);
+        time.text = text;
         //Campos.SetActive(false);
         //Player.GetComponent<Player>().enabled = false;
     }

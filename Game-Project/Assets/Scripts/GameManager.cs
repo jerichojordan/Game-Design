@@ -39,8 +39,8 @@ public class GameManager : MonoBehaviour
     private IEnumerator DoLevelChange(int id)
     {
         yield return new WaitForSeconds(2f);
-        SceneManager.LoadScene(id);
         if (AudioListener.pause) AudioListener.pause = false;
+        SceneManager.LoadScene(id); 
     }
 
     public void MainMenu()
