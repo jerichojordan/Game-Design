@@ -55,7 +55,7 @@ public class Player : MonoBehaviour, IHittable
         CrosshairPositioning(_Crosshair);
         LookAtMouse();
         Move();
-        if (currentAmmo > 0)
+        if (currentAmmo > 0 && !isReloading)
         {
             Shoot();
         }else if (currentAmmo <= 0 && !isReloading) {
@@ -179,6 +179,7 @@ public class Player : MonoBehaviour, IHittable
     {
         currentAmmo = maxAmmo;
         isReloading = false;
+        AudioSource.PlayClipAtPoint(_reloadSound, transform.position);
         Debug.Log("Reload complete!");
     }
 
