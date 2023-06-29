@@ -19,10 +19,14 @@ public class Player : MonoBehaviour, IHittable
     [SerializeField] private float reloadTime = 1.5f;
     [SerializeField] private AudioClip _reloadSound;
     [SerializeField] private GameObject Flashlight;
+    [SerializeField] private float shootInterval = 0.2f;
+    [SerializeField] private AudioClip _finishReloadSound;
+
     public Animator animator;
     private float Damage = 35f;
     public float location;
-    
+
+    private float nextFireTime;
     private Rigidbody2D _rigidbody;
     GameObject _Crosshair;
     public float currentAmmo;
@@ -96,8 +100,11 @@ public class Player : MonoBehaviour, IHittable
 
     private void Shoot()
     {
-        if(Input.GetMouseButtonDown(0)&&isSprinting==false)
+        
+        if(Input.GetMouseButton(0)&&isSprinting==false&&Time.time >= nextFireTime)
         {
+            
+            
             AudioSource.PlayClipAtPoint(_gunShot, transform.position);
             animator.SetTrigger("Shoot");
             var hit = Physics2D.Raycast(
@@ -128,6 +135,7 @@ public class Player : MonoBehaviour, IHittable
                 trailScript.setTargetPosition(endPosition);
             }
             currentAmmo--;
+            nextFireTime = Time.time + shootInterval;
         }
     }
     private void CrosshairPositioning(GameObject Crosshair)
@@ -179,7 +187,7 @@ public class Player : MonoBehaviour, IHittable
     {
         currentAmmo = maxAmmo;
         isReloading = false;
-        AudioSource.PlayClipAtPoint(_reloadSound, transform.position);
+        AudioSource.PlayClipAtPoint(_finishReloadSound, transform.position);
         Debug.Log("Reload complete!");
     }
 
