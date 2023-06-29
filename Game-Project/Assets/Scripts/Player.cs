@@ -21,6 +21,9 @@ public class Player : MonoBehaviour, IHittable
     [SerializeField] private GameObject Flashlight;
     [SerializeField] private float shootInterval = 0.2f;
     [SerializeField] private AudioClip _finishReloadSound;
+    [SerializeField] private AudioClip scream;
+    [SerializeField] private AudioClip dead;
+    [SerializeField] private GameObject _hitBlood;
 
     public Animator animator;
     private float Damage = 35f;
@@ -47,6 +50,7 @@ public class Player : MonoBehaviour, IHittable
                transform.rotation
                );
         isReloading = false;
+        _hitBlood.gameObject.SetActive(false);
         currentAmmo = maxAmmo;
         onFlashlight = true;
         levelFinish = GameObject.FindGameObjectWithTag("Finish").GetComponent<LevelFinish>();
@@ -161,8 +165,15 @@ public class Player : MonoBehaviour, IHittable
         HitPoint -= damage;
         if (HitPoint <= 0)
         {
+            AudioSource.PlayClipAtPoint(dead, this.gameObject.transform.position);
             levelFinish.GameOver();
             gameObject.SetActive(false);
+        }
+        else
+        {
+            AudioSource.PlayClipAtPoint(scream, this.gameObject.transform.position);
+            _hitBlood.gameObject.SetActive(true);
+            Invoke("deactivateBlood", 0.2f);
         }
     }
     public void RecieveHit(RaycastHit2D hit, float damage)
@@ -203,6 +214,10 @@ public class Player : MonoBehaviour, IHittable
             Flashlight.SetActive(true);
             onFlashlight = true;
         }
+    }
+    private void deactivateBlood()
+    {
+        _hitBlood.gameObject.SetActive(false);
     }
 }
 
