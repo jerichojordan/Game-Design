@@ -8,10 +8,15 @@ public class HealthPack : MonoBehaviour
     // Start is called before the first frame update
     [SerializeField] float HealthAmount;
     [SerializeField] AudioClip PickupSound;
+    private AudioSource Asource;
+    private GameObject playerObj;
     private Player player;
     void Start()
     {
         player = GameObject.FindObjectOfType<Player>();
+        Asource = this.gameObject.GetComponent<AudioSource>();
+        Asource.volume += 3f;
+        playerObj = GameObject.FindGameObjectWithTag("Player");
     }
     private void OnTriggerEnter2D(Collider2D collision)
     {
@@ -19,7 +24,7 @@ public class HealthPack : MonoBehaviour
         {
             if (player.HitPoint + HealthAmount > 100) { player.HitPoint = 100; }
             else player.HitPoint += HealthAmount;
-            AudioSource.PlayClipAtPoint(PickupSound,this.gameObject.transform.position);
+            AudioSource.PlayClipAtPoint(PickupSound,playerObj.transform.position);
             this.gameObject.GetComponent<SpriteRenderer>().enabled = false;
             StartCoroutine(PlayParticle());
             Debug.Log("Health +" + HealthAmount);
