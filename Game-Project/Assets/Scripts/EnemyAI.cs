@@ -29,6 +29,7 @@ public class EnemyAI : MonoBehaviour,IHittable
     private float shootTimer;
     public Animator animator;
     private float currentBullet;
+    private GameObject flashtrigger;
 
     private bool isLocated;
     public float location;
@@ -36,6 +37,7 @@ public class EnemyAI : MonoBehaviour,IHittable
     private LevelFinish levelFinish;
     private bool first;
     private bool isReloading;
+    
 
     //EnemyCounter
     private EnemyCounter enemyCounter;
@@ -56,27 +58,27 @@ public class EnemyAI : MonoBehaviour,IHittable
         _deadBlood.gameObject.SetActive(false);
         currentBullet = maxBullet;
         isReloading = false;
-
+        flashtrigger = this.transform.Find("Light 2D + Trigger").gameObject;
     }
 
     void Update()
     {
         if (!isDead) {
             if (player_rb.GetComponent<Player>().location==location) {
-                if (!isLocated)
-                {
-                    if (first == true)
-                    {
-                        AudioSource.PlayClipAtPoint(firstcontact, this.gameObject.transform.position);
-                        first=false;
-                    }
-                    isLocated = true;
-                }
                 moveTowardPlayer();
                 animator.SetFloat("Speed", Mathf.Abs(rb.velocity[0]) + Mathf.Abs(rb.velocity[1]));
                 shootTimer -= Time.deltaTime;
                 if (shootTimer <= 0f && currentBullet >=0)
                 {
+                    if (!isLocated)
+                    {
+                        if (first == true)
+                        {
+                            AudioSource.PlayClipAtPoint(firstcontact, this.gameObject.transform.position);
+                            first = false;
+                        }
+                        isLocated = true;
+                    }
                     Shoot();
                     shootTimer = shootInterval; // Reset the timer
                     currentBullet--;
@@ -120,6 +122,7 @@ public class EnemyAI : MonoBehaviour,IHittable
             animator.SetBool("isDead", true);
             _deadBlood.gameObject.SetActive(true);
             this.tag = "Untagged";
+            flashtrigger.SetActive(false);
             //EnemyCounter
             enemyCounter.EnemyKilled();
         }
