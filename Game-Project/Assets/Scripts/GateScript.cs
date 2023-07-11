@@ -25,7 +25,7 @@ public class GateScript : MonoBehaviour
        
     }
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
         if(GameObject.FindGameObjectsWithTag("Enemy").Length != enemiesnumber)
         {

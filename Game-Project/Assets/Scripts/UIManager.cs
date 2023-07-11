@@ -17,6 +17,8 @@ public class UIManager : MonoBehaviour
     float _tmpHealth;
     private int currentSceneNumber;
     private int _enemyCount;
+    private bool HaveBossLevel;
+
     private void Start()
     {
         _enemyCount = GameObject.FindGameObjectsWithTag("Enemy").Length;
@@ -32,8 +34,12 @@ public class UIManager : MonoBehaviour
         // Setze den Starttext für jedes UI-Element
         healthText.text = "Health: 100";
         ammoText.text = "Ammo: 50";
-        if (currentSceneNumber == 3) missionText.text = "Mission: Eliminate the boss";
+
+        if (currentSceneNumber == 3 || currentSceneNumber == 5) missionText.text = "Mission: Eliminate the boss";
         else missionText.text = "Mission: Eliminate all the enemies";
+
+        if (currentSceneNumber == 2 || currentSceneNumber == 4) HaveBossLevel = true;
+        else HaveBossLevel = false;
     }
 
     // Update is called once per frame
@@ -47,8 +53,8 @@ public class UIManager : MonoBehaviour
 
         healthText.text = "Health: " + _tmpHealth;
         ammoText.text = "Ammo: " + player.currentAmmo;
-        if (currentSceneNumber == 2 && _enemyCount == 0) missionText.text = "Mission: Go to the next area";
-        
+        if (HaveBossLevel && _enemyCount == 0) missionText.text = "Mission: Go to the next area";
+
         if (player.currentAmmo <= 2)
         {
             reloadPromptText.enabled = true;
