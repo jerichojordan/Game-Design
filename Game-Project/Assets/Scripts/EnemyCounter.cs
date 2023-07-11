@@ -7,16 +7,19 @@ public class EnemyCounter : MonoBehaviour
 {
     public TextMeshProUGUI enemyCountText;
     public int enemyCount;
-    [SerializeField] GameObject LastEnemyArrow;
+    //[SerializeField] GameObject LastEnemyArrow;
     private GameObject lastEnemy;
     private GameObject player;
     private float arrowOffset = 0f;
+    private GameObject LastEnemyArrow;
     void Start()
     {
         // Zählen Sie die anfängliche Anzahl der Gegner in der Szene
         enemyCount = GameObject.FindGameObjectsWithTag("Enemy").Length;
         UpdateEnemyCountText();
         player = GameObject.FindGameObjectWithTag("Player");
+        LastEnemyArrow = GameObject.FindGameObjectWithTag("LastEnemyArrow");
+        LastEnemyArrow.SetActive(false);
     }
 
     public void EnemyKilled()
