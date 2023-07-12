@@ -14,27 +14,33 @@ public class LevelFinish : MonoBehaviour
     [SerializeField] GameObject Campos;
     private GameObject Player;
     private GameTimer gameTimer;
+    private bool canCompleted;
+    private float currentSceneNumber;
 
     //EnemyCounter
     private EnemyCounter enemyCounter;
     // Start is called before the first frame update
     void Start()
     {
+        currentSceneNumber = SceneManager.GetActiveScene().buildIndex;
         gameTimer = GameObject.FindGameObjectWithTag("UIManager").GetComponent<GameTimer>();
-        if (SceneManager.GetActiveScene().buildIndex == 1)
+        canCompleted = true;
+        if (currentSceneNumber == 1)
         {
             activateTutorial();
         }
+        else if (currentSceneNumber == 2 || currentSceneNumber == 4) canCompleted = false;
         GameOverUI.SetActive(false);
         levelCompleteUI.SetActive(false);
         Campos.SetActive(true);
         Player = GameObject.FindGameObjectWithTag("Player");
         enemyCounter = GameObject.FindGameObjectWithTag("UIManager").GetComponent<EnemyCounter>();
         
+        
     }
-    private void Update()
+    private void FixedUpdate()
     {
-        if (enemyCounter.enemyCount<=0)
+        if (enemyCounter.enemyCount<=0 && canCompleted)
          {
             Invoke("LevelComplete", 1f);
          }
