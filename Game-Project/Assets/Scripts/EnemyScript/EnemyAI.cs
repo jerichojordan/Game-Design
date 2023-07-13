@@ -26,6 +26,13 @@ public class EnemyAI : MonoBehaviour,IHittable
     [SerializeField] private GameObject _bulletTrail;
     [SerializeField] private GameObject _hitBlood;
     [SerializeField] private GameObject _deadBlood;
+    [SerializeField] private List<SteeringBehaviour> steeringBehaviours;
+    [SerializeField] private List<Detector> detectors;
+    [SerializeField] private AIData aiData;
+    [SerializeField] private float detectionDelay = 0.05f, aiUpdateDelay = 0.06f;
+    //Inputs sent from the Enemy AI to the Enemy controller
+    [SerializeField] private Vector2 movementInput;
+    [SerializeField] private ContextSolver movementDirectionSolver;
 
     public Animator animator;
     public float location;
@@ -44,6 +51,7 @@ public class EnemyAI : MonoBehaviour,IHittable
     private float shootTimer;
     //EnemyCounter
     private EnemyCounter enemyCounter;
+    bool following = false;
 
 
     void Start()
@@ -64,12 +72,20 @@ public class EnemyAI : MonoBehaviour,IHittable
         flashtrigger = this.transform.Find("Light 2D + Trigger").gameObject;
     }
 
+    
+
     void Update()
     {
+        PerformDetection();
         if (!isDead) {
-            if (player_rb.GetComponent<Player>().location==location) {
+            if (aiData.currentTarget != null) {
                 moveTowardPlayer();
-                animator.SetFloat("Speed", Mathf.Abs(rb.velocity[0]) + Mathf.Abs(rb.velocity[1]));
+                if (following == false)
+                {
+                    following = true;
+                    StartCoroutine(Chase());
+                }
+                animator.SetFloat("Speed", 1);
                 shootTimer -= Time.deltaTime;
                 if (shootTimer <= 0f && currentBullet >=0)
                 {
@@ -90,6 +106,23 @@ public class EnemyAI : MonoBehaviour,IHittable
                     Reload();
                 }
             }
+            else if (aiData.GetTargetsCount() > 0)
+            {
+                //Target acquisition logic
+                aiData.currentTarget = aiData.targets[0];
+            }
+            else
+            {
+                animator.SetFloat("Speed", 0);
+            }
+            move();
+        }
+    }
+    private void PerformDetection()
+    {
+        foreach (Detector detector in detectors)
+        {
+            detector.Detect(aiData);
         }
     }
 
@@ -101,7 +134,7 @@ public class EnemyAI : MonoBehaviour,IHittable
      **/
     private void moveTowardPlayer()
     {
-        if (Vector2.Distance(transform.position, player.position) > stopDistance)
+        /*if (Vector2.Distance(transform.position, player.position) > stopDistance)
         {
             transform.position = Vector2.MoveTowards(transform.position, player.position, speed * Time.deltaTime);
         }
@@ -112,10 +145,39 @@ public class EnemyAI : MonoBehaviour,IHittable
         else if (Vector2.Distance(transform.position, player.position) < backoffDistance)
         {
             transform.position = Vector2.MoveTowards(transform.position, player.position, -speed * Time.deltaTime);
-        }
+        }*/
         
         //Facing Sledge
-        transform.right = new Vector2(player.position.x, player.position.y) - new Vector2(transform.position.x, transform.position.y);
+        transform.right = new Vector2(aiData.currentTarget.position.x, aiData.currentTarget.position.y);
+    }
+    private IEnumerator Chase()
+    {
+        if (aiData.currentTarget == null)
+        {
+            //Stopping Logic
+            Debug.Log("Stopping");
+            movementInput = Vector2.zero;
+            following = false;
+            animator.SetFloat("Speed", 0);
+            yield break;
+        }
+        else
+        {
+            //Chase logic
+            movementInput = movementDirectionSolver.GetDirectionToMove(steeringBehaviours, aiData);
+            yield return new WaitForSeconds(aiUpdateDelay);
+            StartCoroutine(Chase());
+            animator.SetFloat("Speed", 1);
+
+        }
+
+    }
+    private void move()
+    {
+        if (movementInput != Vector2.zero)
+        {
+            transform.position = Vector2.MoveTowards(transform.position, movementInput, speed * Time.deltaTime);
+        }
     }
 
     /**
@@ -183,8 +245,8 @@ public class EnemyAI : MonoBehaviour,IHittable
         {
             trailScript.setTargetPosition(hit.point);
             var hittable = hit.collider.GetComponent<IHittable>();
-            var hitted = hit.collider.GetComponent<EnemyAI>();
-            if (hittable != null && hitted==null)
+            var hitted = hit.collider.GetComponent<Player>();
+            if (hittable != null && hitted!=null)
             {
                     hittable.RecieveHit(hit,bulletForce);
             }
