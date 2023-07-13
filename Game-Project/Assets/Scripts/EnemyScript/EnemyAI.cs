@@ -4,41 +4,44 @@ using UnityEngine;
 
 public class EnemyAI : MonoBehaviour,IHittable
 {
+    [Header("Stats")]
     [SerializeField] private float speed = 4f;
+    [SerializeField] private float HitPoint = 100f;
+    [SerializeField] private float bulletForce = 10f;
+    [SerializeField] private float shootInterval = 2f;
+    [SerializeField] private float accuracy = 0.8f;
+    [SerializeField] private float _weaponRange = 10f;
+    [SerializeField] private float maxBullet;
+    [SerializeField] private float reloadTime;
     [SerializeField] private float stopDistance = 12f;
     [SerializeField] private float backoffDistance = 7f;
-    [SerializeField] private float HitPoint = 100f;
+    [Header("Audio")]
+    [SerializeField] private AudioClip _gunShot;
+    [SerializeField] private AudioClip firstcontact;
+    [SerializeField] private AudioClip scream;
+    [SerializeField] private AudioClip dead;
+    [SerializeField] private AudioClip _reloadSound;
+    [Header("Used Asset")]
     [SerializeField] private Transform _gunPoint;
     [SerializeField] private GameObject _bulletTrail;
     [SerializeField] private GameObject _hitBlood;
     [SerializeField] private GameObject _deadBlood;
-    [SerializeField] private float _weaponRange = 10f;
-    [SerializeField] private AudioClip _gunShot;
-    [SerializeField] private float bulletForce = 10f;
-    [SerializeField] private float shootInterval = 2f;
-    [SerializeField] private float accuracy = 0.8f;
-    [SerializeField] private AudioClip firstcontact;
-    [SerializeField] private AudioClip scream;
-    [SerializeField] private AudioClip dead;
-    [SerializeField] private float maxBullet;
-    [SerializeField] private float reloadTime;
-    [SerializeField] private AudioClip _reloadSound;
-    private Transform player;
-    private GameObject player_rb;
-    private Rigidbody2D rb;
-    private float shootTimer;
+
     public Animator animator;
-    private float currentBullet;
-    private GameObject flashtrigger;
+    public float location;
+
 
     private bool isLocated;
-    public float location;
     private bool isDead;
     private LevelFinish levelFinish;
     private bool first;
     private bool isReloading;
-    
-
+    private float currentBullet;
+    private GameObject flashtrigger;
+    private Transform player;
+    private GameObject player_rb;
+    private Rigidbody2D rb;
+    private float shootTimer;
     //EnemyCounter
     private EnemyCounter enemyCounter;
 
@@ -90,6 +93,12 @@ public class EnemyAI : MonoBehaviour,IHittable
         }
     }
 
+
+    /**
+     * 
+     * Enemy Movement
+     * 
+     **/
     private void moveTowardPlayer()
     {
         if (Vector2.Distance(transform.position, player.position) > stopDistance)
@@ -109,6 +118,11 @@ public class EnemyAI : MonoBehaviour,IHittable
         transform.right = new Vector2(player.position.x, player.position.y) - new Vector2(transform.position.x, transform.position.y);
     }
 
+    /**
+     * 
+     * Recieving Hit
+     * 
+     **/
     private void GetHit(RaycastHit2D hit,float damage)
     {
         HitPoint -= damage;
@@ -139,6 +153,11 @@ public class EnemyAI : MonoBehaviour,IHittable
         Debug.Log("RecieveHit called");
     }
 
+    /**
+     * 
+     * Shooting
+     * 
+     * */
     private void Shoot()
     {
 
@@ -164,7 +183,8 @@ public class EnemyAI : MonoBehaviour,IHittable
         {
             trailScript.setTargetPosition(hit.point);
             var hittable = hit.collider.GetComponent<IHittable>();
-            if (hittable != null)
+            var hitted = hit.collider.GetComponent<EnemyAI>();
+            if (hittable != null && hitted==null)
             {
                     hittable.RecieveHit(hit,bulletForce);
             }
@@ -176,10 +196,23 @@ public class EnemyAI : MonoBehaviour,IHittable
         }
         
     }
+
+    /**
+     * 
+     * Blood animation get shot
+     * 
+     **/
     private void deactivateBlood()
     {
         _hitBlood.gameObject.SetActive(false);
     }
+
+
+    /**
+     * 
+     * Reloading
+     *
+     **/
     private void Reload()
     {
         if (isReloading) return; // Ignore if already reloading
