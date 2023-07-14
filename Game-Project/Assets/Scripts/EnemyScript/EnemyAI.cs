@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class EnemyAI : MonoBehaviour,IHittable
@@ -70,13 +71,13 @@ public class EnemyAI : MonoBehaviour,IHittable
         currentBullet = maxBullet;
         isReloading = false;
         flashtrigger = this.transform.Find("Light 2D + Trigger").gameObject;
+        InvokeRepeating("PerformDetection", 0, detectionDelay);
     }
 
     
 
     void Update()
     {
-        PerformDetection();
         if (!isDead) {
             if (aiData.currentTarget != null) {
                 moveTowardPlayer();
@@ -115,7 +116,7 @@ public class EnemyAI : MonoBehaviour,IHittable
             {
                 animator.SetFloat("Speed", 0);
             }
-            move();
+            moveTowardPlayer();
         }
     }
     private void PerformDetection()
@@ -134,21 +135,23 @@ public class EnemyAI : MonoBehaviour,IHittable
      **/
     private void moveTowardPlayer()
     {
-        /*if (Vector2.Distance(transform.position, player.position) > stopDistance)
+        /*if (movementInput == Vector2.zero)
         {
-            transform.position = Vector2.MoveTowards(transform.position, player.position, speed * Time.deltaTime);
-        }
-        else if (Vector2.Distance(transform.position, player.position) < stopDistance && Vector2.Distance(transform.position, player.position) > backoffDistance)
+            rb.velocity = movementInput * speed;
+        }else if(Vector2.Distance(transform.position, player.position) > stopDistance)
         {
-            transform.position = this.transform.position;
-        }
-        else if (Vector2.Distance(transform.position, player.position) < backoffDistance)
+            rb.velocity = movementInput * speed;
+        }else if(Vector2.Distance(transform.position, player.position) < stopDistance && Vector2.Distance(transform.position, player.position) > backoffDistance)
         {
-            transform.position = Vector2.MoveTowards(transform.position, player.position, -speed * Time.deltaTime);
+            rb.velocity = movementInput * 0;
+        }else if (Vector2.Distance(transform.position, player.position) < backoffDistance)
+        {
+            rb.velocity = movementInput * speed;
         }*/
-        
+        rb.velocity = movementInput * speed;
         //Facing Sledge
-        transform.right = new Vector2(aiData.currentTarget.position.x, aiData.currentTarget.position.y);
+        transform.right = new Vector2(aiData.currentTarget.position.x, aiData.currentTarget.position.y) - new Vector2(transform.position.x, transform.position.y);
+        animator.SetFloat("speed", Mathf.Abs(rb.velocity[0]) + Mathf.Abs(rb.velocity[1]));
     }
     private IEnumerator Chase()
     {
@@ -158,7 +161,6 @@ public class EnemyAI : MonoBehaviour,IHittable
             Debug.Log("Stopping");
             movementInput = Vector2.zero;
             following = false;
-            animator.SetFloat("Speed", 0);
             yield break;
         }
         else
@@ -167,17 +169,9 @@ public class EnemyAI : MonoBehaviour,IHittable
             movementInput = movementDirectionSolver.GetDirectionToMove(steeringBehaviours, aiData);
             yield return new WaitForSeconds(aiUpdateDelay);
             StartCoroutine(Chase());
-            animator.SetFloat("Speed", 1);
 
         }
 
-    }
-    private void move()
-    {
-        if (movementInput != Vector2.zero)
-        {
-            transform.position = Vector2.MoveTowards(transform.position, movementInput, speed * Time.deltaTime);
-        }
     }
 
     /**
