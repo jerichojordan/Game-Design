@@ -8,37 +8,41 @@ using UnityEngine.UIElements;
 
 public class Player : MonoBehaviour, IHittable
 {
+    [Header("Stats")]
     [SerializeField] private float _speed = 2f;
-    [SerializeField] private Transform _gunPoint;
-    [SerializeField] private GameObject _bulletTrail;
     [SerializeField] private float _weaponRange = 10f;
-    [SerializeField] private AudioClip _gunShot;
-    [SerializeField] private GameObject _CrosshairSprite;
     [SerializeField] public float HitPoint = 100f;
     [SerializeField] private float maxAmmo = 30f;
     [SerializeField] private float reloadTime = 1.5f;
-    [SerializeField] private AudioClip _reloadSound;
-    [SerializeField] private GameObject Flashlight;
     [SerializeField] private float shootInterval = 0.2f;
+    [Header("Audio")]
     [SerializeField] private AudioClip _finishReloadSound;
     [SerializeField] private AudioClip scream;
     [SerializeField] private AudioClip dead;
+    [SerializeField] private AudioClip _reloadSound;
+    [SerializeField] private AudioClip _gunShot;
+    [Header("Used Asset")]
     [SerializeField] private GameObject _hitBlood;
+    [SerializeField] private GameObject Flashlight;
+    [SerializeField] private GameObject _CrosshairSprite;
+    [SerializeField] private GameObject _bulletTrail;
+    [SerializeField] private Transform _gunPoint;
+
 
     public Animator animator;
-    private float Damage = 35f;
     public float location;
+    public float currentAmmo;
 
+    private float Damage = 35f;
     private float nextFireTime;
     private Rigidbody2D _rigidbody;
-    GameObject _Crosshair;
-    public float currentAmmo;
     private bool isReloading;
     private LevelFinish levelFinish;
     private bool isSprinting;
     private bool onFlashlight;
     private float currentspeed;
-    
+    GameObject _Crosshair;
+
 
     void Start()
     {

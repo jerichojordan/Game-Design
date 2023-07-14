@@ -4,43 +4,54 @@ using UnityEngine;
 
 public class EnemyAI : MonoBehaviour,IHittable
 {
+    [Header("Stats")]
     [SerializeField] private float speed = 4f;
+    [SerializeField] private float HitPoint = 100f;
+    [SerializeField] private float bulletForce = 10f;
+    [SerializeField] private float shootInterval = 2f;
+    [SerializeField] private float accuracy = 0.8f;
+    [SerializeField] private float _weaponRange = 10f;
+    [SerializeField] private float maxBullet;
+    [SerializeField] private float reloadTime;
     [SerializeField] private float stopDistance = 12f;
     [SerializeField] private float backoffDistance = 7f;
-    [SerializeField] private float HitPoint = 100f;
+    [Header("Audio")]
+    [SerializeField] private AudioClip _gunShot;
+    [SerializeField] private AudioClip firstcontact;
+    [SerializeField] private AudioClip scream;
+    [SerializeField] private AudioClip dead;
+    [SerializeField] private AudioClip _reloadSound;
+    [Header("Used Asset")]
     [SerializeField] private Transform _gunPoint;
     [SerializeField] private GameObject _bulletTrail;
     [SerializeField] private GameObject _hitBlood;
     [SerializeField] private GameObject _deadBlood;
-    [SerializeField] private float _weaponRange = 10f;
-    [SerializeField] private AudioClip _gunShot;
-    [SerializeField] private float bulletForce = 10f;
-    [SerializeField] private float shootInterval = 2f;
-    [SerializeField] private float accuracy = 0.8f;
-    [SerializeField] private AudioClip firstcontact;
-    [SerializeField] private AudioClip scream;
-    [SerializeField] private AudioClip dead;
-    [SerializeField] private float maxBullet;
-    [SerializeField] private float reloadTime;
-    [SerializeField] private AudioClip _reloadSound;
-    private Transform player;
-    private GameObject player_rb;
-    private Rigidbody2D rb;
-    private float shootTimer;
+    [SerializeField] private List<SteeringBehaviour> steeringBehaviours;
+    [SerializeField] private List<Detector> detectors;
+    [SerializeField] private AIData aiData;
+    [SerializeField] private float detectionDelay = 0.05f, aiUpdateDelay = 0.06f;
+    //Inputs sent from the Enemy AI to the Enemy controller
+    [SerializeField] private Vector2 movementInput;
+    [SerializeField] private ContextSolver movementDirectionSolver;
+
     public Animator animator;
-    private float currentBullet;
-    private GameObject flashtrigger;
+    public float location;
+
 
     private bool isLocated;
-    public float location;
     private bool isDead;
     private LevelFinish levelFinish;
     private bool first;
     private bool isReloading;
-    
-
+    private float currentBullet;
+    private GameObject flashtrigger;
+    private Transform player;
+    private GameObject player_rb;
+    private Rigidbody2D rb;
+    private float shootTimer;
     //EnemyCounter
     private EnemyCounter enemyCounter;
+    bool following = false;
 
 
     void Start()
@@ -61,12 +72,20 @@ public class EnemyAI : MonoBehaviour,IHittable
         flashtrigger = this.transform.Find("Light 2D + Trigger").gameObject;
     }
 
+    
+
     void Update()
     {
+        PerformDetection();
         if (!isDead) {
-            if (player_rb.GetComponent<Player>().location==location) {
+            if (aiData.currentTarget != null) {
                 moveTowardPlayer();
-                animator.SetFloat("Speed", Mathf.Abs(rb.velocity[0]) + Mathf.Abs(rb.velocity[1]));
+                if (following == false)
+                {
+                    following = true;
+                    StartCoroutine(Chase());
+                }
+                animator.SetFloat("Speed", 1);
                 shootTimer -= Time.deltaTime;
                 if (shootTimer <= 0f && currentBullet >=0)
                 {
@@ -87,12 +106,35 @@ public class EnemyAI : MonoBehaviour,IHittable
                     Reload();
                 }
             }
+            else if (aiData.GetTargetsCount() > 0)
+            {
+                //Target acquisition logic
+                aiData.currentTarget = aiData.targets[0];
+            }
+            else
+            {
+                animator.SetFloat("Speed", 0);
+            }
+            move();
+        }
+    }
+    private void PerformDetection()
+    {
+        foreach (Detector detector in detectors)
+        {
+            detector.Detect(aiData);
         }
     }
 
+
+    /**
+     * 
+     * Enemy Movement
+     * 
+     **/
     private void moveTowardPlayer()
     {
-        if (Vector2.Distance(transform.position, player.position) > stopDistance)
+        /*if (Vector2.Distance(transform.position, player.position) > stopDistance)
         {
             transform.position = Vector2.MoveTowards(transform.position, player.position, speed * Time.deltaTime);
         }
@@ -103,12 +145,46 @@ public class EnemyAI : MonoBehaviour,IHittable
         else if (Vector2.Distance(transform.position, player.position) < backoffDistance)
         {
             transform.position = Vector2.MoveTowards(transform.position, player.position, -speed * Time.deltaTime);
-        }
+        }*/
         
         //Facing Sledge
-        transform.right = new Vector2(player.position.x, player.position.y) - new Vector2(transform.position.x, transform.position.y);
+        transform.right = new Vector2(aiData.currentTarget.position.x, aiData.currentTarget.position.y);
+    }
+    private IEnumerator Chase()
+    {
+        if (aiData.currentTarget == null)
+        {
+            //Stopping Logic
+            Debug.Log("Stopping");
+            movementInput = Vector2.zero;
+            following = false;
+            animator.SetFloat("Speed", 0);
+            yield break;
+        }
+        else
+        {
+            //Chase logic
+            movementInput = movementDirectionSolver.GetDirectionToMove(steeringBehaviours, aiData);
+            yield return new WaitForSeconds(aiUpdateDelay);
+            StartCoroutine(Chase());
+            animator.SetFloat("Speed", 1);
+
+        }
+
+    }
+    private void move()
+    {
+        if (movementInput != Vector2.zero)
+        {
+            transform.position = Vector2.MoveTowards(transform.position, movementInput, speed * Time.deltaTime);
+        }
     }
 
+    /**
+     * 
+     * Recieving Hit
+     * 
+     **/
     private void GetHit(RaycastHit2D hit,float damage)
     {
         HitPoint -= damage;
@@ -139,6 +215,11 @@ public class EnemyAI : MonoBehaviour,IHittable
         Debug.Log("RecieveHit called");
     }
 
+    /**
+     * 
+     * Shooting
+     * 
+     * */
     private void Shoot()
     {
 
@@ -164,7 +245,8 @@ public class EnemyAI : MonoBehaviour,IHittable
         {
             trailScript.setTargetPosition(hit.point);
             var hittable = hit.collider.GetComponent<IHittable>();
-            if (hittable != null)
+            var hitted = hit.collider.GetComponent<Player>();
+            if (hittable != null && hitted!=null)
             {
                     hittable.RecieveHit(hit,bulletForce);
             }
@@ -176,10 +258,23 @@ public class EnemyAI : MonoBehaviour,IHittable
         }
         
     }
+
+    /**
+     * 
+     * Blood animation get shot
+     * 
+     **/
     private void deactivateBlood()
     {
         _hitBlood.gameObject.SetActive(false);
     }
+
+
+    /**
+     * 
+     * Reloading
+     *
+     **/
     private void Reload()
     {
         if (isReloading) return; // Ignore if already reloading
