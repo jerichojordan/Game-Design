@@ -11,7 +11,7 @@ public class EnemyAI : MonoBehaviour,IHittable
     [SerializeField] private float bulletForce = 10f;
     [SerializeField] private float shootInterval = 2f;
     [SerializeField] private float accuracy = 0.8f;
-    [SerializeField] private float _weaponRange = 10f;
+    [SerializeField] private float _weaponRange = 15f;
     [SerializeField] private float maxBullet;
     [SerializeField] private float reloadTime;
     [SerializeField] private float stopDistance = 12f;
@@ -39,10 +39,9 @@ public class EnemyAI : MonoBehaviour,IHittable
     public float location;
 
 
-    private bool isLocated;
+    public bool isLocated;
     private bool isDead;
-    private LevelFinish levelFinish;
-    private bool first;
+    public bool first = true;
     private bool isReloading;
     private float currentBullet;
     private GameObject flashtrigger;
@@ -78,33 +77,16 @@ public class EnemyAI : MonoBehaviour,IHittable
 
     void Update()
     {
+        Invoke("locate", 0.3f);
         if (!isDead) {
-            if (aiData.currentTarget != null) {
+            
+            if (aiData.currentTarget != null && !first) {
+
                 moveTowardPlayer();
                 if (following == false)
                 {
                     following = true;
                     StartCoroutine(Chase());
-                }
-                animator.SetFloat("Speed", 1);
-                shootTimer -= Time.deltaTime;
-                if (shootTimer <= 0f && currentBullet >=0)
-                {
-                    if (!isLocated)
-                    {
-                        if (first == true)
-                        {
-                            AudioSource.PlayClipAtPoint(firstcontact, this.gameObject.transform.position);
-                            first = false;
-                        }
-                        isLocated = true;
-                    }
-                    Shoot();
-                    shootTimer = shootInterval; // Reset the timer
-                    currentBullet--;
-                }else if(currentBullet <=0)
-                {
-                    Reload();
                 }
             }
             else if (aiData.GetTargetsCount() > 0)
@@ -115,6 +97,21 @@ public class EnemyAI : MonoBehaviour,IHittable
             else
             {
                 animator.SetFloat("Speed", 0);
+            }
+            if (isLocated)
+            {
+                facePlayer();
+                shootTimer -= Time.deltaTime;
+                if (shootTimer <= 0f && currentBullet >= 0)
+                {
+                    Shoot();
+                    shootTimer = shootInterval; // Reset the timer
+                    currentBullet--;
+                }
+                else if (currentBullet <= 0)
+                {
+                    Reload();
+                }
             }
             moveTowardPlayer();
         }
@@ -135,23 +132,26 @@ public class EnemyAI : MonoBehaviour,IHittable
      **/
     private void moveTowardPlayer()
     {
-        /*if (movementInput == Vector2.zero)
+        if (movementInput == Vector2.zero)
         {
-            rb.velocity = movementInput * speed;
+            rb.velocity = Vector2.zero;
         }else if(Vector2.Distance(transform.position, player.position) > stopDistance)
         {
             rb.velocity = movementInput * speed;
         }else if(Vector2.Distance(transform.position, player.position) < stopDistance && Vector2.Distance(transform.position, player.position) > backoffDistance)
         {
-            rb.velocity = movementInput * 0;
+            rb.velocity = Vector2.zero;
         }else if (Vector2.Distance(transform.position, player.position) < backoffDistance)
         {
-            rb.velocity = movementInput * speed;
-        }*/
-        rb.velocity = movementInput * speed;
+            rb.velocity = movementInput * -speed;
+        }
         //Facing Sledge
-        transform.right = new Vector2(aiData.currentTarget.position.x, aiData.currentTarget.position.y) - new Vector2(transform.position.x, transform.position.y);
+        facePlayer();
         animator.SetFloat("speed", Mathf.Abs(rb.velocity[0]) + Mathf.Abs(rb.velocity[1]));
+    }
+    private void facePlayer()
+    {
+        transform.right = new Vector2(player.position.x, player.position.y) - new Vector2(transform.position.x, transform.position.y);
     }
     private IEnumerator Chase()
     {
@@ -172,6 +172,25 @@ public class EnemyAI : MonoBehaviour,IHittable
 
         }
 
+    }
+    private void locate()
+    {
+        if (player_rb.GetComponent<Player>().location == location)
+        {
+            if (!isLocated)
+            {
+                if (first == true)
+                {
+                    AudioSource.PlayClipAtPoint(firstcontact, this.gameObject.transform.position);
+                    first = false;
+                }
+                isLocated = true;
+            }
+        }
+        else
+        {
+            isLocated = false;
+        }
     }
 
     /**
