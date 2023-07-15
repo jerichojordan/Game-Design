@@ -42,6 +42,8 @@ public class Player : MonoBehaviour, IHittable
     private bool onFlashlight;
     private float currentspeed;
     GameObject _Crosshair;
+    public float firedBullet;
+    public float hitBullet;
 
 
     void Start()
@@ -59,6 +61,8 @@ public class Player : MonoBehaviour, IHittable
         onFlashlight = true;
         levelFinish = GameObject.FindGameObjectWithTag("Finish").GetComponent<LevelFinish>();
         Flashlight = this.transform.Find("Light 2D").gameObject;
+        firedBullet = 0;
+        hitBullet= 0;
     }
 
     
@@ -111,8 +115,7 @@ public class Player : MonoBehaviour, IHittable
         
         if(Input.GetMouseButton(0)&&isSprinting==false&&Time.time >= nextFireTime)
         {
-            
-            
+            firedBullet++;
             AudioSource.PlayClipAtPoint(_gunShot, transform.position);
             animator.SetTrigger("Shoot");
             var hit = Physics2D.Raycast(
@@ -135,6 +138,7 @@ public class Player : MonoBehaviour, IHittable
                 if( hittable != null )
                 {
                     hittable.RecieveHit(hit, Damage);
+                    hitBullet++;
                 }
             }
             else

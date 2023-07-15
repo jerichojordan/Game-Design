@@ -147,7 +147,7 @@ public class EnemyAI : MonoBehaviour,IHittable
         }
         //Facing Sledge
         facePlayer();
-        animator.SetFloat("speed", Mathf.Abs(rb.velocity[0]) + Mathf.Abs(rb.velocity[1]));
+        animator.SetFloat("Speed", Mathf.Abs(rb.velocity[0]) + Mathf.Abs(rb.velocity[1]));
     }
     private void facePlayer()
     {
