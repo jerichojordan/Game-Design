@@ -6,16 +6,28 @@ using UnityEngine.UI;
 
 public class LevelFinish : MonoBehaviour
 {
+    [Header("UIs / Game Object")]
     [SerializeField] private GameObject GameOverUI;
     [SerializeField] private GameObject levelCompleteUI;
-    [SerializeField] private Text time;
     [SerializeField] private GameObject TutorialUI;
     [SerializeField] private GameObject PlayerUI;
     [SerializeField] GameObject Campos;
+
+    [Header("Texts")]
+    [SerializeField] private Text time;
+    [SerializeField] private Text accuracy;
+    [SerializeField] private Text lastHp;
+    [SerializeField] private Text TotalScore;
+
+
+
+
     private GameObject Player;
     private GameTimer gameTimer;
     private bool canCompleted;
     private float currentSceneNumber;
+    private float startTime;
+    private float startHp;
 
     //EnemyCounter
     private EnemyCounter enemyCounter;
@@ -35,8 +47,8 @@ public class LevelFinish : MonoBehaviour
         Campos.SetActive(true);
         Player = GameObject.FindGameObjectWithTag("Player");
         enemyCounter = GameObject.FindGameObjectWithTag("UIManager").GetComponent<EnemyCounter>();
-        
-        
+        startTime = gameTimer.startTime;
+        startHp = Player.GetComponent<Player>().HitPoint; ;
     }
     private void FixedUpdate()
     {
@@ -69,6 +81,13 @@ public class LevelFinish : MonoBehaviour
 
         string text = string.Format("{0:00}:{1:00}", minutes, seconds);
         time.text = text;
+        float acc = Player.GetComponent<Player>().hitBullet/ Player.GetComponent<Player>().firedBullet;
+        float tmp = acc*100;
+        tmp = Mathf.FloorToInt(tmp);
+        accuracy.text = tmp.ToString()+'%';
+        float lHP = Player.GetComponent<Player>().HitPoint;
+        lastHp.text = lHP.ToString();
+        countTotalPoint(ftime, acc, lHP);
         //Campos.SetActive(false);
         //Player.GetComponent<Player>().enabled = false;
     }
@@ -85,5 +104,11 @@ public class LevelFinish : MonoBehaviour
     {
         TutorialUI.SetActive(false);
         PlayerUI.SetActive(true);
+    }
+    public void countTotalPoint(float time, float accuracy, float lHP)
+    {
+        float totScore = ((time / startTime)*2000) + (accuracy*2000) + ((lHP/startHp)*1000);
+        totScore = Mathf.FloorToInt(totScore);
+        TotalScore.text = totScore.ToString();
     }
 }
