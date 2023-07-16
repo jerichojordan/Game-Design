@@ -98,7 +98,7 @@ public class EnemyAI : MonoBehaviour,IHittable
             {
                 animator.SetFloat("Speed", 0);
             }
-            if (isLocated)
+            if (isLocated && Vector2.Distance(transform.position, player.position) <= _weaponRange)
             {
                 facePlayer();
                 shootTimer -= Time.deltaTime;
