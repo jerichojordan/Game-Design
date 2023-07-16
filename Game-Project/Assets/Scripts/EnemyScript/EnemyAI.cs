@@ -118,9 +118,12 @@ public class EnemyAI : MonoBehaviour,IHittable
     }
     private void PerformDetection()
     {
-        foreach (Detector detector in detectors)
+        if (!isDead)
         {
-            detector.Detect(aiData);
+            foreach (Detector detector in detectors)
+            {
+                detector.Detect(aiData);
+            }
         }
     }
 
