@@ -10,22 +10,36 @@ public class LevelSelectManager : MonoBehaviour
     [SerializeField] private GameObject LevelSelectUI;
     [SerializeField] private Button Level2;
     [SerializeField] private GameObject Lock2;
+    [SerializeField] private Button Level3;
+    [SerializeField] private GameObject Lock3;
 
     void Start()
     {
         LevelSelectUI.SetActive(false);
+
         if (PlayerPrefs.HasKey("Level"))
         {
-            if (PlayerPrefs.GetFloat("Level") >= 1)
+            if (PlayerPrefs.GetFloat("Level") >= 3)
             {
                 Level2.enabled = true;
                 Lock2.gameObject.SetActive(false);
+                Level3.enabled = true;
+                Lock3.gameObject.SetActive(false);
+            }else if (PlayerPrefs.GetFloat("Level") >= 1)
+            {
+                Level2.enabled = true;
+                Lock2.gameObject.SetActive(false);
+                Level3.enabled = false;
+                Lock3.gameObject.SetActive(true);
             }
+            
         }
         else
         {
             Level2.enabled = false;
             Lock2.gameObject.SetActive(true);
+            Level3.enabled = false;
+            Lock3.gameObject.SetActive(true);
         }
     }
     public void openLevelSelect()
@@ -36,14 +50,11 @@ public class LevelSelectManager : MonoBehaviour
     {
         LevelSelectUI.SetActive(false);
     }
-    public void startLevel1()
+    public void startLevel(int lvl)
     {
-        SceneManager.LoadScene(1);
+        SceneManager.LoadScene(lvl);
     }
-    public void startLevel2()
-    {
-        SceneManager.LoadScene(2);
-    }
+    
     
 
 
