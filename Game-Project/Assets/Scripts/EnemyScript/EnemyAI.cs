@@ -27,13 +27,15 @@ public class EnemyAI : MonoBehaviour,IHittable
     [SerializeField] private GameObject _bulletTrail;
     [SerializeField] private GameObject _hitBlood;
     [SerializeField] private GameObject _deadBlood;
+    [Header("Movement AI Parameter")]
     [SerializeField] private List<SteeringBehaviour> steeringBehaviours;
     [SerializeField] private List<Detector> detectors;
     [SerializeField] private AIData aiData;
+    [SerializeField] private ContextSolver movementDirectionSolver;
     [SerializeField] private float detectionDelay = 0.05f, aiUpdateDelay = 0.06f;
     //Inputs sent from the Enemy AI to the Enemy controller
     [SerializeField] private Vector2 movementInput;
-    [SerializeField] private ContextSolver movementDirectionSolver;
+
 
     public Animator animator;
     public float location;
