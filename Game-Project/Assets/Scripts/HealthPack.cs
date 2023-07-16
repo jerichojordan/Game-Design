@@ -15,7 +15,6 @@ public class HealthPack : MonoBehaviour
     {
         player = GameObject.FindObjectOfType<Player>();
         Asource = this.gameObject.GetComponent<AudioSource>();
-        Asource.volume += 3f;
         playerObj = GameObject.FindGameObjectWithTag("Player");
     }
     private void OnTriggerEnter2D(Collider2D collision)
@@ -24,7 +23,8 @@ public class HealthPack : MonoBehaviour
         {
             if (player.HitPoint + HealthAmount > 100) { player.HitPoint = 100; }
             else player.HitPoint += HealthAmount;
-            AudioSource.PlayClipAtPoint(PickupSound,playerObj.transform.position);
+            Asource.clip = PickupSound;
+            Asource.Play();
             this.gameObject.GetComponent<SpriteRenderer>().enabled = false;
             StartCoroutine(PlayParticle());
             Debug.Log("Health +" + HealthAmount);
