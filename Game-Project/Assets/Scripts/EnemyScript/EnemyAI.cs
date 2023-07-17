@@ -79,16 +79,39 @@ public class EnemyAI : MonoBehaviour,IHittable
 
     void Update()
     {
-        Invoke("locate", 0.3f);
         if (!isDead) {
             
-            if (aiData.currentTarget != null && !first) {
+            if (aiData.currentTarget != null) {
 
                 moveTowardPlayer();
                 if (following == false)
                 {
                     following = true;
                     StartCoroutine(Chase());
+                }
+                if (Vector2.Distance(transform.position, player.position) <= _weaponRange)
+                {
+                    facePlayer();
+                    shootTimer -= Time.deltaTime;
+                    if (shootTimer <= 0f && currentBullet >= 0)
+                    {
+                        Shoot();
+                        shootTimer = shootInterval; // Reset the timer
+                        currentBullet--;
+                    }
+                    else if (currentBullet <= 0)
+                    {
+                        Reload();
+                    }
+                }
+                if (!isLocated)
+                {
+                    if (first == true)
+                    {
+                        AudioSource.PlayClipAtPoint(firstcontact, this.gameObject.transform.position);
+                        first = false;
+                    }
+                    isLocated = true;
                 }
             }
             else if (aiData.GetTargetsCount() > 0)
@@ -99,21 +122,6 @@ public class EnemyAI : MonoBehaviour,IHittable
             else
             {
                 animator.SetFloat("Speed", 0);
-            }
-            if (isLocated && Vector2.Distance(transform.position, player.position) <= _weaponRange)
-            {
-                facePlayer();
-                shootTimer -= Time.deltaTime;
-                if (shootTimer <= 0f && currentBullet >= 0)
-                {
-                    Shoot();
-                    shootTimer = shootInterval; // Reset the timer
-                    currentBullet--;
-                }
-                else if (currentBullet <= 0)
-                {
-                    Reload();
-                }
             }
             moveTowardPlayer();
         }
@@ -178,25 +186,7 @@ public class EnemyAI : MonoBehaviour,IHittable
         }
 
     }
-    private void locate()
-    {
-        if (player_rb.GetComponent<Player>().location == location)
-        {
-            if (!isLocated)
-            {
-                if (first == true)
-                {
-                    AudioSource.PlayClipAtPoint(firstcontact, this.gameObject.transform.position);
-                    first = false;
-                }
-                isLocated = true;
-            }
-        }
-        else
-        {
-            isLocated = false;
-        }
-    }
+    
 
     /**
      * 

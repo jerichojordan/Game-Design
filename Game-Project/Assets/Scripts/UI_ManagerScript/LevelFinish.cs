@@ -7,21 +7,21 @@ using UnityEngine.UI;
 public class LevelFinish : MonoBehaviour
 {
     [Header("UIs / Game Object")]
-    [SerializeField] private GameObject GameOverUI;
-    [SerializeField] private GameObject levelCompleteUI;
-    [SerializeField] private GameObject TutorialUI;
-    [SerializeField] private GameObject PlayerUI;
-    [SerializeField] GameObject Campos;
+    [SerializeField] private GameObject GameOverUI = null;
+    [SerializeField] private GameObject levelCompleteUI = null;
+    [SerializeField] private GameObject TutorialUI = null;
+    [SerializeField] private GameObject PlayerUI = null;
+    [SerializeField] GameObject Campos = null;
 
     [Header("Texts")]
-    [SerializeField] private Text time;
-    [SerializeField] private Text accuracy;
-    [SerializeField] private Text lastHp;
-    [SerializeField] private Text TotalScore;
+    [SerializeField] private Text time = null;
+    [SerializeField] private Text accuracy = null;
+    [SerializeField] private Text lastHp = null;
+    [SerializeField] private Text TotalScore = null;
 
     [Header("Audio")]
-    [SerializeField] private AudioClip _levelFinished;
-    [SerializeField] private AudioClip _levelFailed;
+    [SerializeField] private AudioClip _levelFinished = null;
+    [SerializeField] private AudioClip _levelFailed = null;
 
 
     private GameObject MainCamera;
@@ -46,9 +46,11 @@ public class LevelFinish : MonoBehaviour
             activateTutorial();
         }
         else if (currentSceneNumber == 2 || currentSceneNumber == 4) canCompleted = false;
-        
         GameOverUI.SetActive(false);
-        levelCompleteUI.SetActive(false);
+        if (levelCompleteUI != null)
+        {
+            levelCompleteUI.SetActive(false);
+        }
         Campos.SetActive(true);
         Player = GameObject.FindGameObjectWithTag("Player");
         enemyCounter = GameObject.FindGameObjectWithTag("UIManager").GetComponent<EnemyCounter>();
