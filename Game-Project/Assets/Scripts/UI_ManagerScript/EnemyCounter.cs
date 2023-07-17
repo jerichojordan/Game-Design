@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using UnityEngine.SceneManagement;
 
 public class EnemyCounter : MonoBehaviour
 {
@@ -10,6 +11,8 @@ public class EnemyCounter : MonoBehaviour
     //[SerializeField] GameObject LastEnemyArrow;
     private GameObject lastEnemy;
     private GameObject LastEnemyArrow;
+    private GameObject Gate;
+    private float currentSceneNumber;
     void Start()
     {
         // Zählen Sie die anfängliche Anzahl der Gegner in der Szene
@@ -17,6 +20,7 @@ public class EnemyCounter : MonoBehaviour
         UpdateEnemyCountText();
         LastEnemyArrow = GameObject.FindGameObjectWithTag("LastEnemyArrow");
         LastEnemyArrow.SetActive(false);
+        currentSceneNumber = SceneManager.GetActiveScene().buildIndex;
     }
 
     public void EnemyKilled()
@@ -47,6 +51,14 @@ public class EnemyCounter : MonoBehaviour
             var angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
             LastEnemyArrow.transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
         }
-        else if (enemyCount == 0) if (LastEnemyArrow.activeSelf) LastEnemyArrow.SetActive(false);
+        else if (enemyCount == 0)
+            if (currentSceneNumber == 2 || currentSceneNumber == 4)
+            {
+                if (Gate == null) Gate = GameObject.FindGameObjectWithTag("Gate");
+                var dir = Gate.transform.position - LastEnemyArrow.transform.position;
+                var angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
+                LastEnemyArrow.transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
+            }
+            else { if(LastEnemyArrow.activeSelf) LastEnemyArrow.SetActive(false); }
     }
 }
