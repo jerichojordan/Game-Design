@@ -9,15 +9,12 @@ public class EnemyCounter : MonoBehaviour
     public int enemyCount;
     //[SerializeField] GameObject LastEnemyArrow;
     private GameObject lastEnemy;
-    private GameObject player;
-    private float arrowOffset = 0f;
     private GameObject LastEnemyArrow;
     void Start()
     {
         // Zählen Sie die anfängliche Anzahl der Gegner in der Szene
         enemyCount = GameObject.FindGameObjectsWithTag("Enemy").Length;
         UpdateEnemyCountText();
-        player = GameObject.FindGameObjectWithTag("Player");
         LastEnemyArrow = GameObject.FindGameObjectWithTag("LastEnemyArrow");
         LastEnemyArrow.SetActive(false);
     }
@@ -50,5 +47,6 @@ public class EnemyCounter : MonoBehaviour
             var angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
             LastEnemyArrow.transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
         }
+        else if (enemyCount == 0) if (LastEnemyArrow.activeSelf) LastEnemyArrow.SetActive(false);
     }
 }

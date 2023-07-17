@@ -24,8 +24,8 @@ public class LevelFinish : MonoBehaviour
     [SerializeField] private AudioClip _levelFailed;
 
 
-
-
+    private GameObject MainCamera;
+    private AudioSource MusicSource;
     private GameObject Player;
     private GameTimer gameTimer;
     private bool canCompleted;
@@ -46,13 +46,15 @@ public class LevelFinish : MonoBehaviour
             activateTutorial();
         }
         else if (currentSceneNumber == 2 || currentSceneNumber == 4) canCompleted = false;
+        
         GameOverUI.SetActive(false);
         levelCompleteUI.SetActive(false);
         Campos.SetActive(true);
         Player = GameObject.FindGameObjectWithTag("Player");
         enemyCounter = GameObject.FindGameObjectWithTag("UIManager").GetComponent<EnemyCounter>();
         startTime = gameTimer.startTime;
-        startHp = Player.GetComponent<Player>().HitPoint; ;
+        startHp = Player.GetComponent<Player>().HitPoint;
+        MusicSource = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<AudioSource>();
     }
     private void FixedUpdate()
     {
@@ -65,7 +67,10 @@ public class LevelFinish : MonoBehaviour
     // Update is called once per frame
     public void GameOver()
     {
-        AudioSource.PlayClipAtPoint(_levelFailed, Camera.main.transform.position);
+        MusicSource.Pause();
+        MusicSource.clip = _levelFailed;
+        MusicSource.loop = false;
+        MusicSource.Play();
         Time.timeScale = 0f;
         //AudioListener.pause = true;
         GameOverUI.SetActive(true);
@@ -75,7 +80,10 @@ public class LevelFinish : MonoBehaviour
 
     public void LevelComplete()
     {
-        AudioSource.PlayClipAtPoint(_levelFinished, Camera.main.transform.position);
+        MusicSource.Pause();
+        MusicSource.clip = _levelFinished;
+        MusicSource.loop = false;
+        MusicSource.Play();
         Time.timeScale = 0f;
         //AudioListener.pause = true;
         levelCompleteUI.SetActive(true);
