@@ -19,6 +19,10 @@ public class LevelFinish : MonoBehaviour
     [SerializeField] private Text lastHp;
     [SerializeField] private Text TotalScore;
 
+    [Header("Audio")]
+    [SerializeField] private AudioClip _levelFinished;
+    [SerializeField] private AudioClip _levelFailed;
+
 
 
 
@@ -61,8 +65,9 @@ public class LevelFinish : MonoBehaviour
     // Update is called once per frame
     public void GameOver()
     {
+        AudioSource.PlayClipAtPoint(_levelFailed, Camera.main.transform.position);
         Time.timeScale = 0f;
-        AudioListener.pause = true;
+        //AudioListener.pause = true;
         GameOverUI.SetActive(true);
         Campos.SetActive(false);
         Player.GetComponent<Player>().enabled = false;
@@ -70,8 +75,9 @@ public class LevelFinish : MonoBehaviour
 
     public void LevelComplete()
     {
+        AudioSource.PlayClipAtPoint(_levelFinished, Camera.main.transform.position);
         Time.timeScale = 0f;
-        AudioListener.pause = true;
+        //AudioListener.pause = true;
         levelCompleteUI.SetActive(true);
         float level = SceneManager.GetActiveScene().buildIndex;
         PlayerPrefs.SetFloat("Level", level);
