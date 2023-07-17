@@ -5,13 +5,13 @@ using UnityEngine;
 public class SongTrigger : MonoBehaviour
 {
     [SerializeField] private AudioClip BossSong;
-    private GameObject player;
+    private GameObject mainCamera;
     private AudioSource audioSource;
     private bool isPlayed;
     void Start()
     {
-        player = GameObject.FindGameObjectWithTag("Player");
-        audioSource = this.GetComponent<AudioSource>();
+        mainCamera = GameObject.FindGameObjectWithTag("MainCamera");
+        audioSource = mainCamera.GetComponent<AudioSource>();
         isPlayed = false;
     }
     private void OnTriggerEnter2D(Collider2D collision)

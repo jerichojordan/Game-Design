@@ -23,7 +23,6 @@ public class Player : MonoBehaviour, IHittable
     [SerializeField] private AudioClip _gunShot;
     [Header("Used Asset")]
     [SerializeField] private GameObject _hitBlood;
-    [SerializeField] private GameObject Flashlight;
     [SerializeField] private GameObject _CrosshairSprite;
     [SerializeField] private GameObject _bulletTrail;
     [SerializeField] private Transform _gunPoint;
@@ -32,7 +31,7 @@ public class Player : MonoBehaviour, IHittable
     public Animator animator;
     public float location;
     public float currentAmmo;
-
+    private GameObject Flashlight;
     private float Damage = 35f;
     private float nextFireTime;
     private Rigidbody2D _rigidbody;
