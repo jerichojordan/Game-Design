@@ -9,18 +9,19 @@ public class HealthPack : MonoBehaviour
     [SerializeField] float HealthAmount;
     [SerializeField] AudioClip PickupSound;
     private AudioSource Asource;
-    private GameObject playerObj;
     private Player player;
+    private bool isTaken;
     void Start()
     {
         player = GameObject.FindObjectOfType<Player>();
         Asource = this.gameObject.GetComponent<AudioSource>();
-        playerObj = GameObject.FindGameObjectWithTag("Player");
+        isTaken = false;
     }
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.CompareTag("Player") && player.HitPoint < 100)
+        if (collision.CompareTag("Player") && player.HitPoint < 100 && !isTaken)
         {
+            isTaken = true;
             if (player.HitPoint + HealthAmount > 100) { player.HitPoint = 100; }
             else player.HitPoint += HealthAmount;
             Asource.clip = PickupSound;

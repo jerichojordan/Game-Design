@@ -20,6 +20,6 @@ public class SceneLoader : MonoBehaviour
     {
         //Application.Quit();
         EditorApplication.ExitPlaymode();
-        Debug.Log("Quit!");
+        //Debug.Log("Quit!");
     }
 }
