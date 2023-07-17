@@ -4,6 +4,7 @@ using System.Runtime.CompilerServices;
 using Unity.Burst.CompilerServices;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
+using UnityEngine.SceneManagement;
 using UnityEngine.UIElements;
 
 public class Player : MonoBehaviour, IHittable
@@ -62,6 +63,10 @@ public class Player : MonoBehaviour, IHittable
         Flashlight = this.transform.Find("Light 2D").gameObject;
         firedBullet = 0;
         hitBullet= 0;
+        if (PlayerPrefs.HasKey(SceneManager.GetActiveScene().buildIndex.ToString() + "HP"))
+        {
+            HitPoint = PlayerPrefs.GetFloat(SceneManager.GetActiveScene().buildIndex.ToString() + "HP");
+        }
     }
 
     

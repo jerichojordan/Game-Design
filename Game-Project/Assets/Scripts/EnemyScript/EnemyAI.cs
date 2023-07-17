@@ -93,7 +93,7 @@ public class EnemyAI : MonoBehaviour,IHittable
                 {
                     facePlayer();
                     shootTimer -= Time.deltaTime;
-                    if (shootTimer <= 0f && currentBullet >= 0)
+                    if (shootTimer <= 0f && currentBullet > 0)
                     {
                         Shoot();
                         shootTimer = shootInterval; // Reset the timer

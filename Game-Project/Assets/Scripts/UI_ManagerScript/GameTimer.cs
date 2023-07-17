@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using UnityEngine.SceneManagement;
 
 public class GameTimer : MonoBehaviour
 {
@@ -11,6 +12,10 @@ public class GameTimer : MonoBehaviour
     void Start()
     {
         levelFinish = GameObject.FindGameObjectWithTag("Finish").GetComponent<LevelFinish>();
+        if (PlayerPrefs.HasKey(SceneManager.GetActiveScene().buildIndex.ToString()+"time"))
+        {
+            startTime = PlayerPrefs.GetFloat(SceneManager.GetActiveScene().buildIndex.ToString()+"time");
+        }
     }
     void Update()
     {
