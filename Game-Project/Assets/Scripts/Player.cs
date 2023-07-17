@@ -174,6 +174,7 @@ public class Player : MonoBehaviour, IHittable
         if (HitPoint <= 0)
         {
             AudioSource.PlayClipAtPoint(dead, this.gameObject.transform.position);
+            //StartCoroutine(deadFunction());
             levelFinish.GameOver();
             gameObject.SetActive(false);
         }
@@ -226,6 +227,12 @@ public class Player : MonoBehaviour, IHittable
     private void deactivateBlood()
     {
         _hitBlood.gameObject.SetActive(false);
+    }
+
+    private IEnumerator deadFunction()
+    {
+        yield return new WaitForSeconds(6f);
+        levelFinish.GameOver();
     }
 }
 
