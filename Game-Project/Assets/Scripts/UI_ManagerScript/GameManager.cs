@@ -30,7 +30,9 @@ public class GameManager : MonoBehaviour
     {
         if (AudioListener.pause) AudioListener.pause = false;
         Time.timeScale = 1f;
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        int SceneNumber = SceneManager.GetActiveScene().buildIndex;
+        if (SceneNumber == 3 || SceneNumber == 5) SceneNumber--;
+        SceneManager.LoadScene(SceneNumber);
     }
 
     public void ExitGame()
