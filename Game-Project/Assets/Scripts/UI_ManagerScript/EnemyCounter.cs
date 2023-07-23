@@ -1,9 +1,9 @@
-using System.Collections;
-using System.Collections.Generic;
+//using System.Collections;
+//using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 using UnityEngine.SceneManagement;
-using UnityEditor.XR;
+//using UnityEditor.XR;
 
 public class EnemyCounter : MonoBehaviour
 {
